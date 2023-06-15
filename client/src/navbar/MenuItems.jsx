@@ -5,8 +5,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { NavLink } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Login from "./account/Login";
-import SignUp from "./account/SignUp";
+import Login from "../modals/account/Login";
+import SignUp from "../modals/account/SignUp";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -84,8 +84,12 @@ export default function MenuItems({ items, NavClose }) {
         ) : (
           <NavLink
             className={`w-fit  px-2 rounded-md flex gap-3 items-center ${
-              items.path ? "laptop:hover:text-violet-600 py-3" : "py-4"
-            } ${items.path === "logout" ? "text-red-600" : null}`}
+              items.path && items.path !== "logout"
+                ? "laptop:hover:text-violet-600 py-3"
+                : "py-4"
+            } ${
+              items.path === "logout" ? "text-red-600 hover:text-red-500" : null
+            }`}
             to={items.url}
             onClick={
               !items.url && items.path !== "logout"

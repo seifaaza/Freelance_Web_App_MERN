@@ -27,20 +27,27 @@ export default function Team() {
     email: "",
     social: "",
   });
+  const [updateForm, setUpdateForm] = useState({
+    _id: null,
+    fullName: "",
+    image: "",
+    email: "",
+    social: "",
+  });
 
   useEffect(() => {
     fetchTeam();
   }, []);
 
   const fetchTeam = async () => {
-    const res = await axios.get("http://localhost:3000/team");
+    const res = await axios.get("/team");
     setTeam(res.data.team);
     console.log(res);
   };
 
   const addTeam = async (e) => {
     e.preventDefault();
-    const res = await axios.post("http://localhost:3000/team", createForm);
+    const res = await axios.post("/team", createForm);
     setTeam([...team, res.data.team]);
     setCreateForm({
       fullName: "",
@@ -59,8 +66,51 @@ export default function Team() {
     });
   };
 
+  const handleUpdateFieldChange = (e) => {
+    const { name, value } = e.target;
+    setUpdateForm({
+      ...updateForm,
+      [name]: value,
+    });
+  };
+
+  const toggleUpdate = (item) => {
+    setUpdateForm({
+      _id: item._id,
+      fullName: item.fullName,
+      image: item.image,
+      email: item.email,
+      social: item.social,
+    });
+  };
+
+  const updateTeam = async (e) => {
+    e.preventDefault();
+    const { fullName, email, image, social } = updateForm;
+    const res = await axios.put(`/team/${updateForm._id}`, {
+      fullName,
+      email,
+      image,
+      social,
+    });
+    const newTeam = [...team];
+    const teamIndex = team.findIndex((team) => {
+      return team._id === updateForm._id;
+    });
+    newTeam[teamIndex] = res.data.team;
+    setTeam(newTeam);
+    setModalOpen(false);
+    setUpdateForm({
+      _id: null,
+      fullName: "",
+      image: "",
+      email: "",
+      social: "",
+    });
+  };
+
   const deleteTeam = async (_id) => {
-    // const res = await axios.delete(`http://localhost:3000/team/${_id}`);
+    const res = await axios.delete(`/team/${_id}`);
     const newTeam = [...team].filter((team) => {
       return team._id !== _id;
     });
@@ -116,6 +166,7 @@ export default function Team() {
                         onClick={() => {
                           setEditToggle(true);
                           setModalOpen(true);
+                          toggleUpdate(item);
                         }}
                         className="text-violet"
                       >
@@ -163,13 +214,15 @@ export default function Team() {
               {editToggle ? "Edit" : "Add"}
             </h1>
             <form
-              onSubmit={addTeam}
+              onSubmit={editToggle ? updateTeam : addTeam}
               encType="multipart/form-data"
               className="flex flex-col gap-5"
             >
               <TextField
-                value={createForm.fullName}
-                onChange={updateCreateForm}
+                value={editToggle ? updateForm.fullName : createForm.fullName}
+                onChange={
+                  editToggle ? handleUpdateFieldChange : updateCreateForm
+                }
                 name="fullName"
                 type="text"
                 color="secondary"
@@ -179,8 +232,10 @@ export default function Team() {
                 required
               />{" "}
               <TextField
-                value={createForm.email}
-                onChange={updateCreateForm}
+                value={editToggle ? updateForm.email : createForm.email}
+                onChange={
+                  editToggle ? handleUpdateFieldChange : updateCreateForm
+                }
                 name="email"
                 type="email"
                 color="secondary"
@@ -190,8 +245,10 @@ export default function Team() {
                 required
               />{" "}
               <input
-                value={createForm.image}
-                onChange={updateCreateForm}
+                value={editToggle ? updateForm.image : createForm.image}
+                onChange={
+                  editToggle ? handleUpdateFieldChange : updateCreateForm
+                }
                 type="text"
                 name="image"
               />

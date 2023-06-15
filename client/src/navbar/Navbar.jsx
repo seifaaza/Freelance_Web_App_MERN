@@ -57,7 +57,7 @@ export default function Navbar() {
             /> */}
             <Avatar
               alt="seif"
-              src="/public/assets/images/mohamed.jpg"
+              src="/assets/images/mohamed.jpg"
               className="border-2 "
             ></Avatar>
           </Link>

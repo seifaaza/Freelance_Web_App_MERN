@@ -1,11 +1,24 @@
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
-import WarningIcon from "@mui/icons-material/Warning";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import DeleteModal from "../../modals/DeleteModal";
 
 export default function Profile() {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
+  const ModalOpen = (SignEvent) => {
+    setModalOpen(SignEvent);
+  };
+
   return (
     <div className="flex flex-col gap-6 tablet:gap-10 z-10 pt-12 px-3 laptop:px-20 ">
       <div className="flex flex-col bg-white bg-opacity-80 backdrop-blur-lg dark:text-white dark:bg-opacity-5 p-4 tablet:p-6 laptop:p-8 rounded-lg font-main  items-center laptop:items-start justifi-between gap-10  ">
@@ -19,7 +32,7 @@ export default function Profile() {
                   fontSize: "80px",
                 }}
                 alt="seif"
-                src="/public/assets/images/mohamed.jpg"
+                src="/assets/images/mohamed.jpg"
               ></Avatar>
               <div className="self-center flex flex-col gap-2">
                 <h1 className="text-3xl dark:text-white ">Seifeddine AAZA</h1>
@@ -89,22 +102,35 @@ export default function Profile() {
         <p>hhhh</p>
       </div>
       <div className="flex justify-between bg-white bg-opacity-80 backdrop-blur-lg dark:text-white dark:bg-opacity-5 p-4 tablet:p-6 laptop:p-8 rounded-lg font-main gap-6  ">
-        <div className="flex items-center gap-5 text-slate-600 dark:text-slate-400">
-          <WarningIcon />
-          <p className="max-w-md">
-            If you click the button to delete your account there is no option to
-            restore the account !
-          </p>
-        </div>
+        <p className="max-w-md">
+          <span className="font-medium"> Warning :</span> If you click the
+          button to delete your account there is no option to restore the
+          account !
+        </p>
+
         <Button
           variant="contained"
           size="medium"
           endIcon={<DeleteIcon />}
           className="btn btn-contained-danger "
+          onClick={() => setModalOpen(true)}
         >
           Delete my account
         </Button>
       </div>
+      <Modal
+        open={modalOpen}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{ bgcolor: "white" }}
+          className="p-4 tablet:p-6 laptop:p-8 desktop:p-10 desktop:px-16 absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 dark:bg-slate-900 bg-opacity-50 backdrop-blur-lg rounded-lg"
+        >
+          <DeleteModal ModalOpen={ModalOpen} />
+        </Box>
+      </Modal>
     </div>
   );
 }

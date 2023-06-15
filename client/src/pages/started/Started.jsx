@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SignUp from "../../navbar/account/SignUp";
-import Login from "../../navbar/account/Login";
+import SignUp from "../../modals/account/SignUp";
+import Login from "../../modals/account/Login";
 
 export default function Started() {
   const [signSwitch, setSignSwitch] = useState("");
