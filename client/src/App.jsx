@@ -5,6 +5,7 @@ import Footer from "./footer/Footer";
 import "./index.css";
 import ScrollToTop from "./ScrollToTop";
 import MyRoutes from "./Routes";
+import { useState } from "react";
 
 function App() {
   // const blur = [

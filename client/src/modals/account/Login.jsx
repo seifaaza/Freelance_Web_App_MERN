@@ -12,8 +12,10 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import authStore from "../../stores/AuthStore";
 
 export default function Login({ SignSwitch, ModalOpen }) {
+  const store = authStore();
   const [passwordVisibility, setPasswordVisibility] = useState("invisible");
   // const [user, setUser] = useState(null);
   const [createForm, setCreateForm] = useState({
@@ -66,8 +68,10 @@ export default function Login({ SignSwitch, ModalOpen }) {
       <h1 className="text-3xl text-center dark:text-white">Login</h1>
       <TextField
         // error={loginError ? true : false}
-        value={createForm.email}
-        onChange={updateCreateForm}
+        // value={createForm.email}
+        // onChange={updateCreateForm}
+        onChange={store.updateLoginForm}
+        value={store.loginForm.email}
         name="email"
         type="text"
         color="secondary"
@@ -82,8 +86,10 @@ export default function Login({ SignSwitch, ModalOpen }) {
         </InputLabel>
         <OutlinedInput
           name="password"
-          value={createForm.password}
-          onChange={updateCreateForm}
+          // value={createForm.password}
+          // onChange={updateCreateForm}
+          onChange={store.updateLoginForm}
+          value={store.loginForm.password}
           id="outlined-adornment-password"
           type={passwordVisibility == "visible" ? "test" : "password"}
           label="Password"

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Chip from "@mui/material/Chip";
@@ -16,110 +15,113 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import teamStore from "../../stores/TeamStore";
 
 export default function Team() {
-  const [team, setTeam] = useState(null);
+  const store = teamStore();
   const [modalOpen, setModalOpen] = useState(false);
   const [editToggle, setEditToggle] = useState(false);
-  const [createForm, setCreateForm] = useState({
-    fullName: "",
-    image: "",
-    email: "",
-    social: "",
-  });
-  const [updateForm, setUpdateForm] = useState({
-    _id: null,
-    fullName: "",
-    image: "",
-    email: "",
-    social: "",
-  });
 
   useEffect(() => {
-    fetchTeam();
+    store.fetchTeam();
   }, []);
-
-  const fetchTeam = async () => {
-    const res = await axios.get("/team");
-    setTeam(res.data.team);
-    console.log(res);
-  };
-
-  const addTeam = async (e) => {
-    e.preventDefault();
-    const res = await axios.post("/team", createForm);
-    setTeam([...team, res.data.team]);
-    setCreateForm({
-      fullName: "",
-      image: "",
-      email: "",
-      social: "",
-    });
-    setModalOpen(false);
-  };
-
-  const updateCreateForm = (e) => {
-    const { name, value } = e.target;
-    setCreateForm({
-      ...createForm,
-      [name]: value,
-    });
-  };
-
-  const handleUpdateFieldChange = (e) => {
-    const { name, value } = e.target;
-    setUpdateForm({
-      ...updateForm,
-      [name]: value,
-    });
-  };
-
-  const toggleUpdate = (item) => {
-    setUpdateForm({
-      _id: item._id,
-      fullName: item.fullName,
-      image: item.image,
-      email: item.email,
-      social: item.social,
-    });
-  };
-
-  const updateTeam = async (e) => {
-    e.preventDefault();
-    const { fullName, email, image, social } = updateForm;
-    const res = await axios.put(`/team/${updateForm._id}`, {
-      fullName,
-      email,
-      image,
-      social,
-    });
-    const newTeam = [...team];
-    const teamIndex = team.findIndex((team) => {
-      return team._id === updateForm._id;
-    });
-    newTeam[teamIndex] = res.data.team;
-    setTeam(newTeam);
-    setModalOpen(false);
-    setUpdateForm({
-      _id: null,
-      fullName: "",
-      image: "",
-      email: "",
-      social: "",
-    });
-  };
-
-  const deleteTeam = async (_id) => {
-    const res = await axios.delete(`/team/${_id}`);
-    const newTeam = [...team].filter((team) => {
-      return team._id !== _id;
-    });
-    setTeam(newTeam);
-  };
 
   const handleClose = () => {
     setModalOpen(false);
   };
+
+  // const [team, setTeam] = useState(null);
+  // const [createForm, setCreateForm] = useState({
+  //   fullName: "",
+  //   image: "",
+  //   email: "",
+  //   social: "",
+  // });
+  // const [updateForm, setUpdateForm] = useState({
+  //   _id: null,
+  //   fullName: "",
+  //   image: "",
+  //   email: "",
+  //   social: "",
+  // });
+
+  // const fetchTeam = async () => {
+  //   const res = await axios.get("/team");
+  //   setTeam(res.data.team);
+  //   console.log(res);
+  // };
+
+  // const addTeam = async (e) => {
+  //   e.preventDefault();
+  //   const res = await axios.post("/team", createForm);
+  //   setTeam([...team, res.data.team]);
+  //   setCreateForm({
+  //     fullName: "",
+  //     image: "",
+  //     email: "",
+  //     social: "",
+  //   });
+  //   setModalOpen(false);
+  // };
+
+  // const updateCreateForm = (e) => {
+  //   const { name, value } = e.target;
+  //   setCreateForm({
+  //     ...createForm,
+  //     [name]: value,
+  //   });
+  // };
+
+  // const handleUpdateFieldChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUpdateForm({
+  //     ...updateForm,
+  //     [name]: value,
+  //   });
+  // };
+
+  // const toggleUpdate = (item) => {
+  //   setUpdateForm({
+  //     _id: item._id,
+  //     fullName: item.fullName,
+  //     image: item.image,
+  //     email: item.email,
+  //     social: item.social,
+  //   });
+  // };
+
+  // const updateTeam = async (e) => {
+  //   e.preventDefault();
+  //   const { fullName, email, image, social } = updateForm;
+  //   const res = await axios.put(`/team/${updateForm._id}`, {
+  //     fullName,
+  //     email,
+  //     image,
+  //     social,
+  //   });
+  //   const newTeam = [...team];
+  //   const teamIndex = team.findIndex((team) => {
+  //     return team._id === updateForm._id;
+  //   });
+  //   newTeam[teamIndex] = res.data.team;
+  //   setTeam(newTeam);
+  //   setModalOpen(false);
+  //   setUpdateForm({
+  //     _id: null,
+  //     fullName: "",
+  //     image: "",
+  //     email: "",
+  //     social: "",
+  //   });
+  // };
+
+  // const deleteTeam = async (_id) => {
+  //   const res = await axios.delete(`/team/${_id}`);
+  //   const newTeam = [...team].filter((team) => {
+  //     return team._id !== _id;
+  //   });
+  //   setTeam(newTeam);
+  // };
 
   return (
     <>
@@ -135,11 +137,11 @@ export default function Team() {
             </tr>
           </thead>
           <tbody>
-            {team &&
-              team.map((item) => {
+            {store.team &&
+              store.team.map((item) => {
                 return (
                   <tr
-                    key={team._id}
+                    key={store.team._id}
                     className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                   >
                     <td className="px-4 py-3">{item.image}</td>
@@ -166,7 +168,7 @@ export default function Team() {
                         onClick={() => {
                           setEditToggle(true);
                           setModalOpen(true);
-                          toggleUpdate(item);
+                          store.toggleUpdate(item);
                         }}
                         className="text-violet"
                       >
@@ -175,7 +177,7 @@ export default function Team() {
                       <IconButton
                         aria-label="delete"
                         className="text-danger"
-                        onClick={() => deleteTeam(item._id)}
+                        onClick={() => store.deleteTeam(item._id)}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -214,14 +216,20 @@ export default function Team() {
               {editToggle ? "Edit" : "Add"}
             </h1>
             <form
-              onSubmit={editToggle ? updateTeam : addTeam}
+              onSubmit={editToggle ? store.updateTeam : store.addTeam}
               encType="multipart/form-data"
               className="flex flex-col gap-5"
             >
               <TextField
-                value={editToggle ? updateForm.fullName : createForm.fullName}
+                value={
+                  editToggle
+                    ? store.updateForm.fullName
+                    : store.createForm.fullName
+                }
                 onChange={
-                  editToggle ? handleUpdateFieldChange : updateCreateForm
+                  editToggle
+                    ? store.handleUpdateFieldChange
+                    : store.updateCreateForm
                 }
                 name="fullName"
                 type="text"
@@ -232,9 +240,13 @@ export default function Team() {
                 required
               />{" "}
               <TextField
-                value={editToggle ? updateForm.email : createForm.email}
+                value={
+                  editToggle ? store.updateForm.email : store.createForm.email
+                }
                 onChange={
-                  editToggle ? handleUpdateFieldChange : updateCreateForm
+                  editToggle
+                    ? store.handleUpdateFieldChange
+                    : store.updateCreateForm
                 }
                 name="email"
                 type="email"
@@ -245,9 +257,13 @@ export default function Team() {
                 required
               />{" "}
               <input
-                value={editToggle ? updateForm.image : createForm.image}
+                value={
+                  editToggle ? store.updateForm.image : store.createForm.image
+                }
                 onChange={
-                  editToggle ? handleUpdateFieldChange : updateCreateForm
+                  editToggle
+                    ? store.handleUpdateFieldChange
+                    : store.updateCreateForm
                 }
                 type="text"
                 name="image"
