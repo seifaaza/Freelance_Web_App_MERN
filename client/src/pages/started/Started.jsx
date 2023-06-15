@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import SignUp from "../../navbar/account/SignUp";
 import Login from "../../navbar/account/Login";
 
@@ -17,9 +17,7 @@ export default function Started() {
             <span className="whitespace-nowrap"> Together !</span>
           </h1>
 
-          <p className="text-small-heading dark:text-slate-300">
-           
-          </p>
+          <p className="text-small-heading dark:text-slate-300"></p>
         </div>
         {signSwitch === "signUp" || signSwitch === "" ? (
           <SignUp SignSwitch={SignSwitch} />

@@ -6,17 +6,17 @@ export const navData = [
       {
         title: "Freelance",
         url: "/freelance",
-        path: true
+        path: true,
       },
       {
         title: "Marketplace",
         url: "/marketplace",
-        path: true
+        path: true,
       },
       {
         title: "Creative Network",
         url: "/creative-network",
-        path: true
+        path: true,
       },
     ],
   },
@@ -27,12 +27,12 @@ export const navData = [
       {
         title: "About",
         url: "/about",
-        path: true
+        path: true,
       },
       {
         title: "Team",
         url: "/team",
-        path: true
+        path: true,
       },
     ],
   },
@@ -53,6 +53,16 @@ export const navData = [
         title: "Sign up",
         url: false,
         path: "signUp",
+      },
+      {
+        title: "My bag",
+        url: "my-bag",
+        path: "my-bag",
+      },
+      {
+        title: "Logout",
+        url: false,
+        path: "logout",
       },
     ],
   },

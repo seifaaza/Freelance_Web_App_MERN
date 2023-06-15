@@ -9,7 +9,7 @@ import Freelance from "./pages/freelance/Freelance";
 import Marketplace from "./pages/marketplace/MarketPlace";
 import CreativeNetwork from "./pages/creative-network/CreativeNetwork";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Profil from "./pages/user/Profil";
+import Profile from "./pages/profile/Profile";
 
 
 function MyRoutes() {
@@ -23,15 +23,15 @@ function MyRoutes() {
       <Route path="/freelance" element={<Freelance />} />
       <Route path="/marketplace" element={<Marketplace />} />
       <Route path="/creative-network" element={<CreativeNetwork />} />
+      <Route path="/profile" element={<Profile/>} />
       <Route path="*" element={<Error />} />
       <Route path="dashboard/" element={<Dashboard />}>
         <Route path="login" />
         <Route path="admins" />
         <Route path="users" />
-        <Route path="profil" />
+        <Route path="admin-profile" />
         <Route path="team" />
       </Route>
-      <Route path="/profil" element={<Profil/>} />
     </Routes>
   );
 }

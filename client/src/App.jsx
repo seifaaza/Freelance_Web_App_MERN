@@ -6,8 +6,6 @@ import "./index.css";
 import ScrollToTop from "./ScrollToTop";
 import MyRoutes from "./Routes";
 
-
-
 function App() {
   // const blur = [
   //   {
@@ -43,8 +41,8 @@ function App() {
     <div className="relative bg-slate-50 dark:bg-dark overflow-hidden">
       <Navbar />
       <div className="relative main-container py-16 z-10">
-        <ScrollToTop />
         <MyRoutes />
+        <ScrollToTop />
       </div>
       <Footer />
       <img src="assets/shapes/blur.png" alt="" className="blur-shape blur-1 " />

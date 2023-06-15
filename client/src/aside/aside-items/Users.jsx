@@ -29,10 +29,10 @@ export default function Users() {
       <table className=" rounded-md overflow-hidden divide-y divide-slate-800 w-full">
         <thead>
           <tr className="bg-slate-300 dark:bg-slate-600 font-medium">
-            <td className="px-8 py-3">First name</td>
-            <td className="px-8 py-3">Last name</td>
-            <td className="px-8 py-3"> Email</td>
-            <td className="px-8 py-3"> Actions</td>
+            <td className="px-6 py-3">Full name</td>
+            <td className="px-6 py-3"> Email</td>
+            <td className="px-6 py-3"> Password</td>
+            <td className="px-6 py-3"> Actions</td>
           </tr>
         </thead>
         <tbody>
@@ -43,10 +43,14 @@ export default function Users() {
                   key={users._id}
                   className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                 >
-                  <td className="px-8 py-3">{item.firstName}</td>
-                  <td className="px-8 py-3">{item.lastName}</td>
-                  <td className="px-8 py-3">{item.email}</td>
-                  <td className="px-8 ">
+                  <td className="px-6 py-3 whitespace-nowrap">
+                    {item.fullName}
+                  </td>
+                  <td className="px-6 py-3">{item.email}</td>
+                  <td className="px-6 py-3 text-ellipsis overflow-hidden max-w-sm whitespace-nowrap">
+                    {item.password}
+                  </td>
+                  <td className="px-6 ">
                     <IconButton
                       aria-label="delete"
                       className="text-danger"

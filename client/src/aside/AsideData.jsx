@@ -1,7 +1,7 @@
 const AsideData = [
   {
     title: "Profil",
-    url: "profil",
+    url: "admin-profile",
   },
   {
     title: "Admins",

@@ -4,6 +4,7 @@ import { navData } from "./navData";
 import MenuItems from "./MenuItems";
 import SwitchMode from "./SwitchMode";
 import { Link } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
 
 export default function Navbar() {
   const [navOpen, setNavOpen] = useState(false);
@@ -40,8 +41,12 @@ export default function Navbar() {
     >
       <div className="main-container flex flex-col flex-wrap laptop:items-center laptop:flex-row justify-between py-2 laptop:py-0">
         <div className="flex justify-between">
-          <Link to="/" onClick={ScrollToTop}>
-            <img
+          <Link
+            //  to="/"
+            to="/profile"
+            onClick={ScrollToTop}
+          >
+            {/* <img
               src="/assets/svg/logo/logo.svg"
               alt=""
               className="h-10 selection:bg-transparent"
@@ -49,10 +54,17 @@ export default function Navbar() {
                 setNavOpen(false);
                 document.body.classList.remove("fixed");
               }}
-            />
+            /> */}
+            <Avatar
+              alt="seif"
+              src="/public/assets/images/mohamed.jpg"
+              className="border-2 "
+            ></Avatar>
           </Link>
           <div
-            className={`cursor-pointer nav-icon ${navOpen ? "nav-open" : ""} selection:bg-transparent`}
+            className={`cursor-pointer nav-icon ${
+              navOpen ? "nav-open" : ""
+            } selection:bg-transparent`}
             onClick={() => {
               setNavOpen(!navOpen);
             }}

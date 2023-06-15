@@ -3,7 +3,7 @@ import AsideData from "./AsideData";
 
 export default function Aside() {
   return (
-    <div className="flex flex-col gap-6 py-8 px-8 h-fit rounded-lg bg-violet-100 dark:bg-violet-800 backdrop-opacity-10 font-main text-small text-slate-700 dark:text-white top-0">
+    <div className="flex flex-col gap-6 py-8 px-8 h-fit rounded-lg bg-slate-200 dark:bg-violet-800 backdrop-opacity-10 font-main text-small text-slate-700 dark:text-white top-0">
       {AsideData.map((item, index) => {
         return (
           <NavLink

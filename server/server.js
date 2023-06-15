@@ -3,7 +3,10 @@ const express = require("express");
 const connectToDB = require("./config/connectToDb");
 const cors = require("cors");
 const Team = require("./models/team");
+const cookieParser = require("cookie-parser");
+const requireAuth = require('./middleware/requireAuth')
 const multer = require("multer");
+
 
 //Import models
 const adminController = require("./controllers/adminController");
@@ -12,16 +15,21 @@ const teamController = require("./controllers/teamController");
 
 // Load env variables
 const PORT = process.env.PORT || 5000;
-if (process.env.NODE_ENV != "production") {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
 // Create express app
 const app = express();
 
+
 //Configure express app
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 
 // Connect to database
 connectToDB();
@@ -36,7 +44,12 @@ app.put("/admins/:id", adminController.updateAdmin);
 app.delete("/admins/:id", adminController.deleteAdmin);
 
 // Users
+app.post("/signup", userController.signup);
+app.get("/check-auth",requireAuth, userController.checkAuth);
+app.post("/login", userController.login);
+app.get("/logout", userController.logout);
 app.get("/users", userController.fetchUsers);
+// app.post("/users", userController.createUser);
 app.delete("/users/:id", userController.deleteUser);
 
 // Team

@@ -9,6 +9,8 @@ import Login from "./account/Login";
 import SignUp from "./account/SignUp";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 
 export default function MenuItems({ items, NavClose }) {
   const [dropdown, setDropdown] = useState(false);
@@ -46,6 +48,10 @@ export default function MenuItems({ items, NavClose }) {
     setSignSwitch(SignEvent);
   };
 
+  const ModalOpen = (SignEvent) => {
+    setModalOpen(SignEvent);
+  };
+
   return (
     <>
       <li
@@ -79,10 +85,10 @@ export default function MenuItems({ items, NavClose }) {
           <NavLink
             className={`w-fit  px-2 rounded-md flex gap-3 items-center ${
               items.path ? "laptop:hover:text-violet-600 py-3" : "py-4"
-            } `}
+            } ${items.path === "logout" ? "text-red-600" : null}`}
             to={items.url}
             onClick={
-              !items.url
+              !items.url && items.path !== "logout"
                 ? () => {
                     setModalOpen(true);
                     setSignSwitch(items.path);
@@ -92,11 +98,15 @@ export default function MenuItems({ items, NavClose }) {
                   }
             }
           >
-            {!items.url && items.path === "signUp" ? (
-              <PersonAddIcon />
-            ) : !items.url && items.path === "login" ? (
+            {!items.url && items.path === "login" ? (
               <LoginIcon />
-            ) : null}{" "}
+            ) : !items.url && items.path === "signUp" ? (
+              <PersonAddIcon />
+            ) : items.path === "my-bag" ? (
+              <ShoppingBagIcon />
+            ) : !items.url && items.path === "logout" ? (
+              <LogoutIcon />
+            ) : null}
             <span> {items.title}</span>{" "}
           </NavLink>
         )}
@@ -112,9 +122,9 @@ export default function MenuItems({ items, NavClose }) {
           className="p-4 tablet:p-6 laptop:p-8 desktop:p-10 absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 dark:bg-slate-900 bg-opacity-50 backdrop-blur-lg rounded-lg"
         >
           {signSwitch === "signUp" ? (
-            <SignUp SignSwitch={SignSwitch} />
+            <SignUp SignSwitch={SignSwitch} ModalOpen={ModalOpen} />
           ) : signSwitch === "login" ? (
-            <Login SignSwitch={SignSwitch} />
+            <Login SignSwitch={SignSwitch} ModalOpen={ModalOpen} />
           ) : null}
         </Box>
       </Modal>
