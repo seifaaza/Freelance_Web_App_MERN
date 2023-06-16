@@ -1,28 +1,14 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import UserStore from "../../stores/UserStore";
 
 export default function Users() {
-  const [users, setUsers] = useState(null);
+  const store = UserStore();
 
   useEffect(() => {
-    fetchUsers();
+    store.fetchUsers();
   }, []);
-
-  const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:3000/users");
-    setUsers(res.data.users);
-    console.log(res);
-  };
-
-  const deleteUser = async (_id) => {
-    const res = await axios.delete(`http://localhost:3000/users/${_id}`);
-    const newUsers = [...users].filter((user) => {
-      return user._id !== _id;
-    });
-    setUsers(newUsers);
-  };
 
   return (
     <div className="flex gap-10 font-main text-slate-700 dark:text-white w-full">
@@ -36,11 +22,11 @@ export default function Users() {
           </tr>
         </thead>
         <tbody>
-          {users &&
-            users.map((item) => {
+          {store.users &&
+            store.users.map((item) => {
               return (
                 <tr
-                  key={users._id}
+                  key={store.users._id}
                   className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                 >
                   <td className="px-6 py-3 whitespace-nowrap">
@@ -54,7 +40,7 @@ export default function Users() {
                     <IconButton
                       aria-label="delete"
                       className="text-danger"
-                      onClick={() => deleteUser(item._id)}
+                      onClick={() => store.deleteUser(item._id)}
                     >
                       <DeleteIcon />
                     </IconButton>

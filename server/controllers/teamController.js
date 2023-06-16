@@ -6,24 +6,42 @@ const fetchTeam = async (req, res) => {
   res.json({ team: team });
 };
 
-const createTeam = async (req, res) => {
-  const fullName = req.body.fullName;
-  const email = req.body.email;
-  const image = req.body.image;
+async function createTeam(req, res) {
+  try{
+    const {fullName, email, image, linkedin, github, figma} = req.body;
+    const team = await Team.create({fullName, email, image, linkedin, github, figma });
+    res.json({ team: team })
+  }
+  catch(err){
+    console.log(err);
+    res.sendStatus(400)
+  }
+}
 
-  const password = req.body.password;
-  const social = req.body.social;
-  const team = await Team.create({
-    fullName: fullName,
-    image: image,
-    email: email,
-    password: password,
-    social: social,
-  });
-  res.json({ team: team });
-};
-
-
+// const createTeam = async (req, res) => {
+//   try{
+//     const fullName = req.body.fullName;
+//     const email = req.body.email;
+//     const image = req.body.image;
+//     const linkedin = req.body.linkedin;
+//     const github = req.body.linkedin;
+//     const figma = req.body.linkedin;
+//     const team = await Team.create({
+//       fullName: fullName,
+//       image: image,
+//       email: email,
+//       linkedin: linkedin,
+//       github: github,
+//       figma: figma,
+//     });
+//     res.json({ team: team });
+//     res.sendStatus(200);
+//   }
+//   catch(err) {
+//     console.log(err);
+//     res.sendStatus(400)
+//   }
+// };
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -51,15 +69,17 @@ const updateTeam = async (req, res) => {
   const fullName = req.body.fullName;
   const image = req.body.image;
   const email = req.body.email;
-  const password = req.body.password;
-  const social = req.body.social;
+  const linkedin = req.body.linkedin;
+  const github = req.body.github;
+  const figma = req.body.figma;
 
   await Team.findByIdAndUpdate(teamId, {
     fullName: fullName,
     image: image,
     email: email,
-    password: password,
-    social: social,
+    linkedin: linkedin,
+    github: github,
+    figma: figma,
   });
 
   const team = await Team.findById(teamId);

@@ -3,9 +3,17 @@ const mongoose = require("mongoose");
 const teamSchema = new mongoose.Schema({
   fullName: String,
   image: String,
-  email: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    index: true
+  },
   password: String,
-  social: Array
+  linkedin: String,
+  github: String,
+  figma: String,
 });
 
 const Team = mongoose.model("Team", teamSchema);

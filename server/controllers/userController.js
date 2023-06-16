@@ -2,12 +2,17 @@ const Users = require("../models/user");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const fetchUsers = async (req, res) => {
+  const users = await Users.find();
+  res.json({ users: users });
+};
+
 async function signup(req, res) {
   try{
     const {fullName, email, password} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8)
-    await Users.create({fullName, email, password: hashedPassword});
-    res.sendStatus(200);
+    const users = await Users.create({fullName, email, password: hashedPassword});
+    res.json({ users: users })
   }
   catch(err){
     console.log(err);
@@ -17,7 +22,6 @@ async function signup(req, res) {
 
 async function login(req, res) {
   try {
-
     const {email, password} = req.body;
     const user = await Users.findOne({email});
   if(!user) return res.sendStatus(401);
@@ -73,10 +77,7 @@ function logout(req, res) {
 
 // };
 
-const fetchUsers = async (req, res) => {
-  const users = await Users.find();
-  res.json({ users: users });
-};
+
 
 const deleteUser = async (req, res) => {
   const userId = req.params.id;

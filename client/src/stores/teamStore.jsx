@@ -3,46 +3,74 @@ import axios from "axios";
 
 const teamStore = create((set) => ({
   modalOpen: false,
+  editToggle: false,
+  emailError: false,
 
   team: null,
 
   createForm: {
     fullName: "",
     email: "",
-    password: "",
     image: "",
-    social: "",
+    linkedin: "",
+    github: "",
+    figma: "",
   },
 
   updateForm: {
     _id: null,
     fullName: "",
     email: "",
-    password: "",
     image: "",
-    social: "",
+    linkedin: "",
+    github: "",
+    figma: "",
+  },
+
+  handleOpen: () => {
+    set({ modalOpen: true });
+  },
+  handleClose: () => {
+    set({ modalOpen: false });
   },
 
   fetchTeam: async () => {
-    const res = await axios.get("http://localhost:3000/team");
+    const res = await axios.get("/team");
     set({ team: res.data.team });
   },
 
   addTeam: async (e) => {
     e.preventDefault();
-    const { createForm, team } = teamStore.getState();
-    const res = await axios.post("http://localhost:3000/team", createForm);
-    set({
-      team: [...team, res.data.team],
-      createForm: {
-        fullName: "",
-        email: "",
-        password: "",
-        image: "",
-        social: "",
-      },
-      modalOpen: false,
-    });
+    try {
+      const { createForm, team } = teamStore.getState();
+      const res = await axios.post("/team", createForm);
+      set({
+        team: [...team, res.data.team],
+        createForm: {
+          fullName: "",
+          email: "",
+          image: "",
+          linkedin: "",
+          github: "",
+          figma: "",
+        },
+        modalOpen: false,
+      });
+    } catch (err) {
+      if (
+        err.response &&
+        err.response.status >= 400 &&
+        err.response.status < 500
+      )
+        set({
+          emailError: true,
+        });
+      else {
+        set({
+          emailError: false,
+        });
+      }
+    }
   },
 
   updateCreateForm: (e) => {
@@ -69,31 +97,35 @@ const teamStore = create((set) => ({
     });
   },
 
-  toggleUpdate: ({ _id, fullName, email, password, image, social }) => {
+  toggleUpdate: ({ _id, fullName, email, image, linkedin, github, figma }) => {
     set({
       updateForm: {
         _id,
         fullName,
         email,
-        password,
         image,
-        social,
+        linkedin,
+        github,
+        figma,
       },
+      editToggle: true,
+      modalOpen: true,
     });
   },
 
   updateTeam: async (e) => {
     e.preventDefault();
     const {
-      updateForm: { _id, fullName, email, password, image, social },
+      updateForm: { _id, fullName, email, image, linkedin, github, figma },
       team,
     } = teamStore.getState();
-    const res = await axios.put(`http://localhost:3000/team/${_id}`, {
+    const res = await axios.put(`/team/${_id}`, {
       fullName,
       email,
-      password,
       image,
-      social,
+      linkedin,
+      github,
+      figma,
     });
     const newTeam = [...team];
     const teamIndex = team.findIndex((team) => {
@@ -107,18 +139,29 @@ const teamStore = create((set) => ({
         fullName: "",
         image: "",
         email: "",
-        social: "",
+        linkedin: "",
+        github: "",
+        figma: "",
       },
+      modalOpen: false,
     });
   },
 
   deleteTeam: async (_id) => {
-    const res = await axios.delete(`http://localhost:3000/team/${_id}`);
+    const res = await axios.delete(`/team/${_id}`);
     const { team } = teamStore.getState();
     const newTeam = [...team].filter((team) => {
       return team._id !== _id;
     });
     set({ team: newTeam });
+  },
+
+  addSwitch: () => {
+    set({ editToggle: false, modalOpen: true });
+  },
+
+  editSwitch: () => {
+    set({ editToggle: true, modalOpen: true });
   },
 }));
 

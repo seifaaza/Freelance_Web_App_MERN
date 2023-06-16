@@ -1,24 +1,18 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import TeamStore from "../../../../stores/TeamStore";
 
 export default function TeamMembers() {
-  const [team, setTeam] = useState(null);
+  const store = TeamStore();
 
   useEffect(() => {
-    fetchTeam();
+    store.fetchTeam();
   }, []);
-
-  const fetchTeam = async () => {
-    const res = await axios.get("http://localhost:3000/team");
-    setTeam(res.data.team);
-    console.log(res);
-  };
 
   const TeamItems = () => {
     return (
-      team &&
-      team.map((item, index) => {
+      store.team &&
+      store.team.map((item, index) => {
         return (
           <div
             key={index}
@@ -49,17 +43,33 @@ export default function TeamMembers() {
                 </Link>
               </div>
               <div className="flex gap-6">
-                {item.social.map((item, index) => {
-                  return item.icon != false && item.icon != "false" ? (
-                    <Link to={item.link} target="_blank" key={index}>
-                      <img
-                        src={`/assets/svg/icons/${item.icon}.svg`}
-                        className="w-5 opacity-70 hover:opacity-100"
-                        alt={`${item.icon} icon`}
-                      />
-                    </Link>
-                  ) : null;
-                })}
+                {item.linkedin ? (
+                  <Link to={item.linkedin} target="_blank">
+                    <img
+                      src={`/assets/svg/icons/linkedin.svg`}
+                      className="w-5 opacity-70 hover:opacity-100"
+                      alt={`Linkedin icon`}
+                    />
+                  </Link>
+                ) : null}
+                {item.github ? (
+                  <Link to={item.github} target="_blank">
+                    <img
+                      src={`/assets/svg/icons/github.svg`}
+                      className="w-5 opacity-70 hover:opacity-100"
+                      alt={`Github icon`}
+                    />
+                  </Link>
+                ) : null}
+                {item.figma ? (
+                  <Link to={item.figma} target="_blank">
+                    <img
+                      src={`/assets/svg/icons/figma.svg`}
+                      className="w-5 opacity-70 hover:opacity-100"
+                      alt={`Figma icon`}
+                    />
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>

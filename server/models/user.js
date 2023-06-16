@@ -15,6 +15,7 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  image: String,
 });
 
 // usersSchema.pre('save', async function (next) {

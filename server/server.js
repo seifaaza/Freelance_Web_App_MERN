@@ -54,27 +54,7 @@ app.delete("/users/:id", userController.deleteUser);
 
 // Team
 app.get("/team", teamController.fetchTeam);
-// app.post("/team", teamController.createTeam);
-app.post(
-  "/team",
-  //  upload.single("image"),
-  async (req, res) => {
-    const fullName = req.body.fullName;
-    const email = req.body.email;
-    const image = req.body.image;
-    const password = req.body.password;
-    const social = req.body.social;
-    const team = await Team.create({
-      fullName: fullName,
-      // image: req.file.originalname,
-      image: image,
-      email: email,
-      password: password,
-      social: social,
-    });
-    res.json({ team: team });
-  }
-);
+app.post("/team", teamController.createTeam);
 app.put("/team/:id", teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
 

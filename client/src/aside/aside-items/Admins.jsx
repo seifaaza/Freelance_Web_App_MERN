@@ -6,7 +6,6 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
-import axios from "axios";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
@@ -14,56 +13,15 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import AdminStore from "../../stores/AdminStore";
 
 export default function Admins() {
+  const store = AdminStore();
   const [passwordVisibility, setPasswordVisibility] = useState("invisible");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [admins, setAdmins] = useState(null);
-  const [createForm, setCreateForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
 
   useEffect(() => {
-    fetchAdmins();
+    store.fetchAdmins();
   }, []);
-
-  const fetchAdmins = async () => {
-    const res = await axios.get("http://localhost:3000/admins");
-    setAdmins(res.data.admins);
-    console.log(res);
-  };
-
-  const updateCreateForm = (e) => {
-    const { name, value } = e.target;
-    setCreateForm({
-      ...createForm,
-      [name]: value,
-    });
-  };
-
-  const addAdmin = async (e) => {
-    e.preventDefault();
-
-    const res = await axios.post("http://localhost:3000/admins", createForm);
-
-    setAdmins([...admins, res.data.admins]);
-
-    setCreateForm({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    });
-
-    setModalOpen(false);
-  };
 
   return (
     <>
@@ -77,8 +35,8 @@ export default function Admins() {
             </tr>
           </thead>
           <tbody>
-            {admins &&
-              admins.map((item) => {
+            {store.admins &&
+              store.admins.map((item) => {
                 return (
                   <tr
                     key={item._id}
@@ -98,17 +56,15 @@ export default function Admins() {
           size="large"
           endIcon={<PersonAddIcon />}
           className="btn btn-contained h-fit w-fit"
-          onClick={() => {
-            setModalOpen(true);
-          }}
+          onClick={store.handleOpen}
         >
           Add
         </Button>
       </div>
 
       <Modal
-        open={modalOpen}
-        onClose={handleClose}
+        open={store.modalOpen}
+        onClose={store.handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -118,11 +74,11 @@ export default function Admins() {
         >
           <div className="flex flex-col gap-5 w-full font-main text-slate-700 dark:text-white laptop:max-w-sm">
             <h1 className="text-3xl text-center ">Add admin</h1>
-            <form onSubmit={addAdmin} className="flex flex-col gap-4">
+            <form onSubmit={store.addAdmin} className="flex flex-col gap-4">
               <TextField
                 name="firstName"
-                value={createForm.firstName}
-                onChange={updateCreateForm}
+                value={store.createForm.firstName}
+                onChange={store.updateCreateForm}
                 type="text"
                 color="secondary"
                 id="outlined-textarea"
@@ -132,8 +88,8 @@ export default function Admins() {
               />{" "}
               <TextField
                 name="lastName"
-                value={createForm.lastName}
-                onChange={updateCreateForm}
+                value={store.createForm.lastName}
+                onChange={store.updateCreateForm}
                 type="text"
                 color="secondary"
                 id="outlined-textarea"
@@ -143,8 +99,8 @@ export default function Admins() {
               />{" "}
               <TextField
                 name="email"
-                value={createForm.email}
-                onChange={updateCreateForm}
+                value={store.createForm.email}
+                onChange={store.updateCreateForm}
                 type="email"
                 color="secondary"
                 id="outlined-textarea"
@@ -161,8 +117,8 @@ export default function Admins() {
                 </InputLabel>
                 <OutlinedInput
                   name="password"
-                  value={createForm.password}
-                  onChange={updateCreateForm}
+                  value={store.createForm.password}
+                  onChange={store.updateCreateForm}
                   id="outlined-adornment-password"
                   type={passwordVisibility == "visible" ? "test" : "password"}
                   label="Password"
@@ -196,9 +152,7 @@ export default function Admins() {
                   size="large"
                   endIcon={<CloseIcon />}
                   className="btn btn-outlined-danger grow"
-                  onClick={() => {
-                    setModalOpen(false);
-                  }}
+                  onClick={store.handleClose}
                 >
                   Cancel
                 </Button>
@@ -208,10 +162,6 @@ export default function Admins() {
                   size="large"
                   endIcon={<CheckIcon />}
                   className="btn btn-contained grow"
-                  onClick={() => {
-                    console.log(createForm.firstName.trim().length);
-                  }}
-                  // disabled={`${createForm.firstName.trim().length == 0 ? "true" : "" }`}
                 >
                   Add
                 </Button>

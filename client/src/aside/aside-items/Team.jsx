@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Chip from "@mui/material/Chip";
@@ -15,113 +15,14 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import teamStore from "../../stores/TeamStore";
+import TeamStore from "../../stores/TeamStore";
 
 export default function Team() {
-  const store = teamStore();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editToggle, setEditToggle] = useState(false);
+  const store = TeamStore();
 
   useEffect(() => {
     store.fetchTeam();
   }, []);
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
-  // const [team, setTeam] = useState(null);
-  // const [createForm, setCreateForm] = useState({
-  //   fullName: "",
-  //   image: "",
-  //   email: "",
-  //   social: "",
-  // });
-  // const [updateForm, setUpdateForm] = useState({
-  //   _id: null,
-  //   fullName: "",
-  //   image: "",
-  //   email: "",
-  //   social: "",
-  // });
-
-  // const fetchTeam = async () => {
-  //   const res = await axios.get("/team");
-  //   setTeam(res.data.team);
-  //   console.log(res);
-  // };
-
-  // const addTeam = async (e) => {
-  //   e.preventDefault();
-  //   const res = await axios.post("/team", createForm);
-  //   setTeam([...team, res.data.team]);
-  //   setCreateForm({
-  //     fullName: "",
-  //     image: "",
-  //     email: "",
-  //     social: "",
-  //   });
-  //   setModalOpen(false);
-  // };
-
-  // const updateCreateForm = (e) => {
-  //   const { name, value } = e.target;
-  //   setCreateForm({
-  //     ...createForm,
-  //     [name]: value,
-  //   });
-  // };
-
-  // const handleUpdateFieldChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setUpdateForm({
-  //     ...updateForm,
-  //     [name]: value,
-  //   });
-  // };
-
-  // const toggleUpdate = (item) => {
-  //   setUpdateForm({
-  //     _id: item._id,
-  //     fullName: item.fullName,
-  //     image: item.image,
-  //     email: item.email,
-  //     social: item.social,
-  //   });
-  // };
-
-  // const updateTeam = async (e) => {
-  //   e.preventDefault();
-  //   const { fullName, email, image, social } = updateForm;
-  //   const res = await axios.put(`/team/${updateForm._id}`, {
-  //     fullName,
-  //     email,
-  //     image,
-  //     social,
-  //   });
-  //   const newTeam = [...team];
-  //   const teamIndex = team.findIndex((team) => {
-  //     return team._id === updateForm._id;
-  //   });
-  //   newTeam[teamIndex] = res.data.team;
-  //   setTeam(newTeam);
-  //   setModalOpen(false);
-  //   setUpdateForm({
-  //     _id: null,
-  //     fullName: "",
-  //     image: "",
-  //     email: "",
-  //     social: "",
-  //   });
-  // };
-
-  // const deleteTeam = async (_id) => {
-  //   const res = await axios.delete(`/team/${_id}`);
-  //   const newTeam = [...team].filter((team) => {
-  //     return team._id !== _id;
-  //   });
-  //   setTeam(newTeam);
-  // };
 
   return (
     <>
@@ -149,25 +50,22 @@ export default function Team() {
                     <td className="px-4 py-3">{item.email}</td>
                     <td className="px-4 py-3">
                       <Stack direction="row" spacing={1}>
-                        {item.social != "" &&
-                          item.social.map((item, index) => {
-                            return item.icon != false &&
-                              item.icon != "false" ? (
-                              <Chip
-                                key={index}
-                                label={item.icon}
-                                className="material-style"
-                              />
-                            ) : null;
-                          })}
+                        {item.linkedin ? (
+                          <Chip label="linkedin" className="material-style" />
+                        ) : null}
+                        {item.github ? (
+                          <Chip label="github" className="material-style" />
+                        ) : null}
+                        {item.figma ? (
+                          <Chip label="figma" className="material-style" />
+                        ) : null}
                       </Stack>
                     </td>
+
                     <td className="px-4 flex items-center justify-center">
                       <IconButton
                         aria-label="edit"
                         onClick={() => {
-                          setEditToggle(true);
-                          setModalOpen(true);
                           store.toggleUpdate(item);
                         }}
                         className="text-violet"
@@ -192,17 +90,14 @@ export default function Team() {
           size="large"
           endIcon={<PersonAddIcon />}
           className="btn btn-contained h-fit w-fit"
-          onClick={() => {
-            setEditToggle(false);
-            setModalOpen(true);
-          }}
+          onClick={store.addSwitch}
         >
           Add
         </Button>
       </div>
       <Modal
-        open={modalOpen}
-        onClose={handleClose}
+        open={store.modalOpen}
+        onClose={store.handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -213,21 +108,21 @@ export default function Team() {
           <div className="flex flex-col gap-5 w-full font-main text-slate-700 dark:text-white laptop:max-w-sm">
             <h1 className="text-3xl text-center ">
               {" "}
-              {editToggle ? "Edit" : "Add"}
+              {store.editToggle ? "Edit" : "Add"}
             </h1>
             <form
-              onSubmit={editToggle ? store.updateTeam : store.addTeam}
+              onSubmit={store.editToggle ? store.updateTeam : store.addTeam}
               encType="multipart/form-data"
               className="flex flex-col gap-5"
             >
               <TextField
                 value={
-                  editToggle
+                  store.editToggle
                     ? store.updateForm.fullName
                     : store.createForm.fullName
                 }
                 onChange={
-                  editToggle
+                  store.editToggle
                     ? store.handleUpdateFieldChange
                     : store.updateCreateForm
                 }
@@ -240,28 +135,35 @@ export default function Team() {
                 required
               />{" "}
               <TextField
+                error={store.emailError ? true : false}
                 value={
-                  editToggle ? store.updateForm.email : store.createForm.email
+                  store.editToggle
+                    ? store.updateForm.email
+                    : store.createForm.email
                 }
                 onChange={
-                  editToggle
+                  store.editToggle
                     ? store.handleUpdateFieldChange
                     : store.updateCreateForm
                 }
                 name="email"
                 type="email"
-                color="secondary"
+                color={store.emailError ? "error" : "secondary"}
                 id="outlined-textarea"
-                label="E-mail"
+                label={
+                  store.emailError ? "This e-mail is already used ! " : "E-mail"
+                }
                 placeholder="Your E-mail"
                 required
               />{" "}
               <input
                 value={
-                  editToggle ? store.updateForm.image : store.createForm.image
+                  store.editToggle
+                    ? store.updateForm.image
+                    : store.createForm.image
                 }
                 onChange={
-                  editToggle
+                  store.editToggle
                     ? store.handleUpdateFieldChange
                     : store.updateCreateForm
                 }
@@ -276,6 +178,16 @@ export default function Team() {
                   Linkedin (optional)
                 </InputLabel>
                 <OutlinedInput
+                  value={
+                    store.editToggle
+                      ? store.updateForm.linkedin
+                      : store.createForm.linkedin
+                  }
+                  onChange={
+                    store.editToggle
+                      ? store.handleUpdateFieldChange
+                      : store.updateCreateForm
+                  }
                   name="linkedin"
                   id="outlined-adornment-linkedin"
                   type="text"
@@ -300,6 +212,16 @@ export default function Team() {
                   Github (optional)
                 </InputLabel>
                 <OutlinedInput
+                  value={
+                    store.editToggle
+                      ? store.updateForm.github
+                      : store.createForm.github
+                  }
+                  onChange={
+                    store.editToggle
+                      ? store.handleUpdateFieldChange
+                      : store.updateCreateForm
+                  }
                   name="github"
                   id="outlined-adornment-github"
                   type="text"
@@ -324,6 +246,16 @@ export default function Team() {
                   Figma (optional)
                 </InputLabel>
                 <OutlinedInput
+                  value={
+                    store.editToggle
+                      ? store.updateForm.figma
+                      : store.createForm.figma
+                  }
+                  onChange={
+                    store.editToggle
+                      ? store.handleUpdateFieldChange
+                      : store.updateCreateForm
+                  }
                   name="figma"
                   id="outlined-adornment-figma"
                   type="text"
@@ -346,9 +278,7 @@ export default function Team() {
                   size="large"
                   endIcon={<CloseIcon />}
                   className="btn btn-outlined-danger grow"
-                  onClick={() => {
-                    setModalOpen(false);
-                  }}
+                  onClick={store.handleClose}
                 >
                   Cancel
                 </Button>
@@ -358,10 +288,8 @@ export default function Team() {
                   size="large"
                   endIcon={<CheckIcon />}
                   className="btn btn-contained grow"
-
-                  // disabled={`${createForm.firstName.trim().length == 0 ? "true" : "" }`}
                 >
-                  {editToggle ? "Edit" : "Add"}
+                  {store.editToggle ? "Edit" : "Add"}
                 </Button>
               </div>
             </form>

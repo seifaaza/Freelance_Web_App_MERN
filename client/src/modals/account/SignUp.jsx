@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
@@ -12,62 +11,22 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import UserStore from "../../stores/UserStore";
 
-export default function SignUp({ SignSwitch, ModalOpen }) {
+export default function SignUp({ SignSwitch }) {
+  const store = UserStore();
+
   const [passwordVisibility, setPasswordVisibility] = useState("invisible");
-  // const [user, setUser] = useState(null);
-  const [createForm, setCreateForm] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
-  const [emailError, setEmailError] = useState(false);
-
-  const addUser = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("/signup", createForm);
-      // const { data } = await UsersApi.createUser(createForm);
-      // console.log(data);
-      ModalOpen(false);
-      window.location.replace("/profile");
-      // setUser([...user, res.data.users]);
-      // setCreateForm({
-      //   fullName: "",
-      //   email: "",
-      //   password: "",
-      // });
-    } catch (err) {
-      if (
-        err.response &&
-        err.response.status >= 400 &&
-        err.response.status < 500
-      )
-        setEmailError(true);
-      else {
-        setEmailError(false);
-      }
-    }
-  };
-
-  const updateCreateForm = (e) => {
-    const { name, value } = e.target;
-    setCreateForm({
-      ...createForm,
-      [name]: value,
-    });
-  };
-
   return (
     <form
-      onSubmit={addUser}
+      onSubmit={store.signup}
       encType="multipart/form-data"
       className="flex flex-col gap-5 w-full text-slate-700 laptop:max-w-sm"
     >
       <h1 className="text-3xl text-center dark:text-white">Sign Up</h1>
       <TextField
-        value={createForm.fullName}
-        onChange={updateCreateForm}
+        value={store.createForm.fullName}
+        onChange={store.updateCreateForm}
         name="fullName"
         type="text"
         color="secondary"
@@ -77,14 +36,14 @@ export default function SignUp({ SignSwitch, ModalOpen }) {
         required
       />{" "}
       <TextField
-        error={emailError ? true : false}
-        value={createForm.email}
-        onChange={updateCreateForm}
+        error={store.emailError ? true : false}
+        value={store.createForm.email}
+        onChange={store.updateCreateForm}
         name="email"
         type="text"
-        color={emailError ? "error" : "secondary"}
+        color={store.emailError ? "error" : "secondary"}
         id="outlined-textarea"
-        label={emailError ? "This e-mail is already used ! " : "E-mail"}
+        label={store.emailError ? "This e-mail is already used ! " : "E-mail"}
         placeholder="Your E-mail"
         required
       />{" "}
@@ -94,8 +53,8 @@ export default function SignUp({ SignSwitch, ModalOpen }) {
         </InputLabel>
         <OutlinedInput
           name="password"
-          value={createForm.password}
-          onChange={updateCreateForm}
+          value={store.createForm.password}
+          onChange={store.updateCreateForm}
           id="outlined-adornment-password"
           type={passwordVisibility == "visible" ? "test" : "password"}
           label="Password"
