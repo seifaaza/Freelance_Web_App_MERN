@@ -29,7 +29,7 @@ async function login(req, res) {
   const passwordMatch = bcrypt.compareSync(password, user.password);
   if(!passwordMatch) return res.sendStatus(401)
   
-  const exp = Date.now() + 1000 * 10;
+  const exp = Date.now() + 1000 * 60 * 60 * 24;
   const token = jwt.sign({sub: user._id, exp}, process.env.SECRET)
   
   res.cookie("Authorization", token, {

@@ -11,22 +11,30 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import UserStore from "../../stores/UserStore";
+import authStore from "../../stores/AuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp({ SignSwitch }) {
-  const store = UserStore();
+  const store = authStore();
+  const navigate = useNavigate();
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    await store.signup();
+    navigate("/profile");
+  };
 
   const [passwordVisibility, setPasswordVisibility] = useState("invisible");
   return (
     <form
-      onSubmit={store.signup}
+      onSubmit={handleSignUp}
       encType="multipart/form-data"
       className="flex flex-col gap-5 w-full text-slate-700 laptop:max-w-sm"
     >
       <h1 className="text-3xl text-center dark:text-white">Sign Up</h1>
       <TextField
-        value={store.createForm.fullName}
-        onChange={store.updateCreateForm}
+        value={store.signUpForm.fullName}
+        onChange={store.updateSignupForm}
         name="fullName"
         type="text"
         color="secondary"
@@ -37,8 +45,8 @@ export default function SignUp({ SignSwitch }) {
       />{" "}
       <TextField
         error={store.emailError ? true : false}
-        value={store.createForm.email}
-        onChange={store.updateCreateForm}
+        value={store.signUpForm.email}
+        onChange={store.updateSignupForm}
         name="email"
         type="text"
         color={store.emailError ? "error" : "secondary"}
@@ -53,8 +61,8 @@ export default function SignUp({ SignSwitch }) {
         </InputLabel>
         <OutlinedInput
           name="password"
-          value={store.createForm.password}
-          onChange={store.updateCreateForm}
+          value={store.signUpForm.password}
+          onChange={store.updateSignupForm}
           id="outlined-adornment-password"
           type={passwordVisibility == "visible" ? "test" : "password"}
           label="Password"
@@ -108,5 +116,4 @@ export default function SignUp({ SignSwitch }) {
 
 SignUp.propTypes = {
   SignSwitch: PropTypes.string,
-  ModalOpen: PropTypes.string,
 };

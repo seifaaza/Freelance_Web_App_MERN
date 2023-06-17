@@ -12,15 +12,23 @@ import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import authStore from "../../stores/AuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Login({ SignSwitch }) {
   const store = authStore();
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    await store.login();
+    navigate("/profile");
+  };
 
   const [passwordVisibility, setPasswordVisibility] = useState("invisible");
 
   return (
     <form
-      onSubmit={store.login}
+      onSubmit={handleLogin}
       encType="multipart/form-data"
       className="flex flex-col gap-5 w-full text-slate-700 laptop:max-w-sm"
     >

@@ -5,8 +5,15 @@ const authStore = create((set) => ({
   loggedIn: null,
 
   loginError: false,
+  emailError: false,
 
   loginForm: {
+    email: "",
+    password: "",
+  },
+
+  signUpForm: {
+    fullName: "",
     email: "",
     password: "",
   },
@@ -23,14 +30,31 @@ const authStore = create((set) => ({
     });
   },
 
-  login: async (e) => {
+  updateSignupForm: (e) => {
+    const { name, value } = e.target;
+    set((state) => {
+      return {
+        signUpForm: {
+          ...state.signUpForm,
+          [name]: value,
+        },
+      };
+    });
+  },
+
+  login: async () => {
     try {
-      e.preventDefault();
       const { loginForm } = authStore.getState();
       const res = await axios.post("/login", loginForm, {
         withCredentials: true,
       });
-      window.location.replace("/profile");
+      set({
+        loggedIn: true,
+        loginForm: {
+          email: "",
+          password: "",
+        },
+      });
     } catch (err) {
       if (
         err.response &&
@@ -48,6 +72,37 @@ const authStore = create((set) => ({
     }
   },
 
+  signup: async () => {
+    try {
+      const { signUpForm } = authStore.getState();
+      const res = await axios.post("/signup", signUpForm, {
+        withCredentials: true,
+      });
+      set({
+        loggedIn: true,
+        signUpForm: {
+          fullName: "",
+          email: "",
+          password: "",
+        },
+      });
+    } catch (err) {
+      if (
+        err.response &&
+        err.response.status >= 400 &&
+        err.response.status < 500
+      )
+        set({
+          emailError: true,
+        });
+      else {
+        set({
+          emailError: false,
+        });
+      }
+    }
+  },
+
   checkAuth: async () => {
     try {
       await axios("/check-auth", { withCredentials: true });
@@ -55,6 +110,11 @@ const authStore = create((set) => ({
     } catch (err) {
       set({ loggedIn: false });
     }
+  },
+
+  logout: async () => {
+    await axios.get("/logout", { withCredentials: true });
+    set({ loggedIn: false });
   },
 }));
 

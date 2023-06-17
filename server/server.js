@@ -45,8 +45,8 @@ app.delete("/admins/:id", adminController.deleteAdmin);
 
 // Users
 app.post("/signup", userController.signup);
-app.get("/check-auth",requireAuth, userController.checkAuth);
 app.post("/login", userController.login);
+app.get("/check-auth",requireAuth, userController.checkAuth);
 app.get("/logout", userController.logout);
 app.get("/users", userController.fetchUsers);
 // app.post("/users", userController.createUser);

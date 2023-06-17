@@ -11,11 +11,14 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import authStore from "../stores/AuthStore";
 
-export default function MenuItems({ items, NavClose }) {
+export default function MenuItems({ items }) {
   const [dropdown, setDropdown] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [signSwitch, setSignSwitch] = useState("");
+
+  const store = authStore();
 
   let ref = useRef();
 
@@ -81,37 +84,60 @@ export default function MenuItems({ items, NavClose }) {
             </button>
             <Dropdown submenus={items.submenu} dropdown={dropdown} />
           </>
+        ) : !items.url && items.path === "signUp" ? (
+          <NavLink
+            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+            onClick={() => {
+              setModalOpen(true);
+              setSignSwitch(items.path);
+            }}
+          >
+            <PersonAddIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : !items.url && items.path === "login" ? (
+          <NavLink
+            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+            onClick={() => {
+              setModalOpen(true);
+              setSignSwitch(items.path);
+            }}
+          >
+            <LoginIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : items.url && items.path === "my-bag" ? (
+          <NavLink
+            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+          >
+            <ShoppingBagIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : !items.url && items.path === "logout" ? (
+          <NavLink
+            className={`text-red-600 laptop:hover:text-red-500 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+            onClick={store.logout}
+          >
+            <LogoutIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : items.url && items.url === "/community" ? (
+          <NavLink
+            className={` py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+          >
+            <span> {items.title} </span>
+          </NavLink>
         ) : (
           <NavLink
-            className={`w-fit  px-2 rounded-md flex gap-3 items-center ${
-              items.path && items.path !== "logout"
-                ? "laptop:hover:text-violet-600 py-3"
-                : "py-4"
-            } ${
-              items.path === "logout" ? "text-red-600 hover:text-red-500" : null
-            }`}
+            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
             to={items.url}
-            onClick={
-              !items.url && items.path !== "logout"
-                ? () => {
-                    setModalOpen(true);
-                    setSignSwitch(items.path);
-                  }
-                : () => {
-                    window.innerWidth <= 1024 ? NavClose(false) : null;
-                  }
-            }
           >
-            {!items.url && items.path === "login" ? (
-              <LoginIcon />
-            ) : !items.url && items.path === "signUp" ? (
-              <PersonAddIcon />
-            ) : items.path === "my-bag" ? (
-              <ShoppingBagIcon />
-            ) : !items.url && items.path === "logout" ? (
-              <LogoutIcon />
-            ) : null}
-            <span> {items.title}</span>{" "}
+            <span> {items.title} </span>
           </NavLink>
         )}
       </li>
@@ -138,5 +164,4 @@ export default function MenuItems({ items, NavClose }) {
 
 MenuItems.propTypes = {
   items: PropTypes.object,
-  NavClose: PropTypes.string,
 };
