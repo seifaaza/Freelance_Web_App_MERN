@@ -86,7 +86,7 @@ export default function Admins() {
                   >
                     <td className="px-8 py-3">{item.firstName}</td>
                     <td className="px-8 py-3">{item.lastName}</td>
-                    <td className="px-8 py-3">{item.password}</td>
+                    <td className="px-8 py-3">{item.email}</td>
                   </tr>
                 );
               })}
