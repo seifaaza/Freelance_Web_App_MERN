@@ -19,9 +19,9 @@ export default function Started() {
 
           <p className="text-small-heading dark:text-slate-300"></p>
         </div>
-        {signSwitch === "signUp" || signSwitch === "" ? (
+        {signSwitch === "signUp" ? (
           <SignUp SignSwitch={SignSwitch} />
-        ) : signSwitch === "login" ? (
+        ) : signSwitch === "login" || signSwitch === "" ? (
           <Login SignSwitch={SignSwitch} />
         ) : null}
       </div>

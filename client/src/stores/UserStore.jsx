@@ -31,7 +31,6 @@ const userStore = create((set) => ({
     try {
       const { createForm, users } = userStore.getState();
       const res = await axios.post("/signup", createForm);
-      window.location.replace("/profile");
     } catch (err) {
       if (
         err.response &&

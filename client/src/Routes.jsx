@@ -10,7 +10,7 @@ import Marketplace from "./pages/marketplace/MarketPlace";
 import CreativeNetwork from "./pages/creative-network/CreativeNetwork";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Profile from "./pages/profile/Profile";
-
+import RequireAuth from "./RequireAuth";
 
 function MyRoutes() {
   return (
@@ -23,7 +23,14 @@ function MyRoutes() {
       <Route path="/freelance" element={<Freelance />} />
       <Route path="/marketplace" element={<Marketplace />} />
       <Route path="/creative-network" element={<CreativeNetwork />} />
-      <Route path="/profile" element={<Profile/>} />
+      <Route
+        path="/profile"
+        element={
+          <RequireAuth>
+            <Profile />
+          </RequireAuth>
+        }
+      />
       <Route path="*" element={<Error />} />
       <Route path="dashboard/" element={<Dashboard />}>
         <Route path="login" />
