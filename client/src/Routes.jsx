@@ -10,7 +10,9 @@ import Marketplace from "./pages/marketplace/MarketPlace";
 import CreativeNetwork from "./pages/creative-network/CreativeNetwork";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Profile from "./pages/profile/Profile";
-import RequireAuth from "./RequireAuth";
+import RequireAuth from "./authentication/RequireAuth";
+import AdminLogin from "./pages/dashboard/AdminLogin";
+import AdminRequireAuth from "./authentication/AdminRequireAuth";
 
 function MyRoutes() {
   return (
@@ -32,8 +34,16 @@ function MyRoutes() {
         }
       />
       <Route path="*" element={<Error />} />
-      <Route path="dashboard/" element={<Dashboard />}>
-        <Route path="login" />
+      <Route path="admin-login" element={<AdminLogin />} />
+      <Route
+        path="dashboard/"
+        element={
+          <AdminRequireAuth>
+            {" "}
+            <Dashboard />
+          </AdminRequireAuth>
+        }
+      >
         <Route path="admins" />
         <Route path="users" />
         <Route path="admin-profile" />

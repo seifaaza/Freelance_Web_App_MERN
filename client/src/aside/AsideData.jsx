@@ -15,6 +15,10 @@ const AsideData = [
     title: "Users",
     url: "users",
   },
+  {
+    title: "Logout",
+    url: false,
+  },
 ];
 
 export default AsideData;

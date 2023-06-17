@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import authStore from "./stores/AuthStore";
-import Started from "./pages/started/Started";
-import Progress from "./Progress";
-import Profile from "./pages/profile/Profile";
+import authStore from "../stores/AuthStore";
+import Started from "../pages/started/Started";
+import Progress from "../Progress";
+import Profile from "../pages/profile/Profile";
 
 function RequireAuth(props) {
   const store = authStore();

@@ -21,14 +21,14 @@ const adminStore = create((set) => ({
   },
 
   fetchAdmins: async () => {
-    const res = await axios.get("http://localhost:3000/admins");
+    const res = await axios.get("/admins");
     set({ admins: res.data.admins });
   },
 
   addAdmin: async (e) => {
     e.preventDefault();
     const { createForm, admins } = adminStore.getState();
-    const res = await axios.post("http://localhost:3000/admins", createForm);
+    const res = await axios.post("/admins", createForm);
     set({
       admins: [...admins, res.data.admins],
       createForm: {

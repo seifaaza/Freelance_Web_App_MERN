@@ -12,7 +12,17 @@ async function signup(req, res) {
     const {fullName, email, password} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8)
     const users = await Users.create({fullName, email, password: hashedPassword});
-    res.json({ users: users })
+    const exp = Date.now() + 1000 * 60 * 60 * 24;
+    const token = jwt.sign({sub: users._id, exp}, process.env.SECRET)
+  
+  res.cookie("Authorization", token, {
+    expires : new Date(exp),
+    httpOnly : true,
+    sameSite : "lax",
+    secure : process.env.NODE_ENV === 'production',
+  })
+  res.json({ users: users })
+
   }
   catch(err){
     console.log(err);
@@ -66,19 +76,6 @@ function logout(req, res) {
 }
 
 
-// const createUser = async (req, res) => {
-//   const {fullName, email, password} = req.body;
-//   let user = await Users.findOne({email})
-//   if(user) return res.status(400).send("User already taken")
-
-//   user = new Users({fullName, email, password});
-//   await user.save();
-//   return res.send( user.genAuthToken() )
-
-// };
-
-
-
 const deleteUser = async (req, res) => {
   const userId = req.params.id;
 
@@ -90,7 +87,6 @@ const deleteUser = async (req, res) => {
 module.exports = {
   deleteUser: deleteUser,
   fetchUsers: fetchUsers,
-  // createUser: createUser,
   signup: signup,
   checkAuth: checkAuth,
   login: login,

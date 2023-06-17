@@ -2,10 +2,9 @@
 const express = require("express");
 const connectToDB = require("./config/connectToDb");
 const cors = require("cors");
-const Team = require("./models/team");
 const cookieParser = require("cookie-parser");
 const requireAuth = require('./middleware/requireAuth')
-const multer = require("multer");
+const requireAdminAuth = require('./middleware/requireAdminAuth')
 
 
 //Import models
@@ -38,6 +37,9 @@ connectToDB();
 
 // Admins
 app.get("/admins", adminController.fetchAdmins);
+app.post("/admin-login", adminController.login);
+app.get("/admin-check-auth",requireAdminAuth, adminController.checkAuth);
+app.get("/admin-logout", adminController.logout); 
 app.get("/admins/:id", adminController.fetchAdmin);
 app.post("/admins", adminController.createAdmin);
 app.put("/admins/:id", adminController.updateAdmin);
@@ -49,7 +51,6 @@ app.post("/login", userController.login);
 app.get("/check-auth",requireAuth, userController.checkAuth);
 app.get("/logout", userController.logout);
 app.get("/users", userController.fetchUsers);
-// app.post("/users", userController.createUser);
 app.delete("/users/:id", userController.deleteUser);
 
 // Team
