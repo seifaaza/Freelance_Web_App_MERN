@@ -73,6 +73,18 @@ const teamStore = create((set) => ({
     }
   },
 
+  handleImage: (e) => {
+    const { name, value } = e.target.files[0];
+    set((state) => {
+      return {
+        createForm: {
+          ...state.createForm,
+          [name]: value,
+        },
+      };
+    });
+  },
+
   updateCreateForm: (e) => {
     const { name, value } = e.target;
     set((state) => {

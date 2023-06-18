@@ -3,6 +3,11 @@ const express = require("express");
 const connectToDB = require("./config/connectToDb");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+
+
+
+//Authentication
 const requireAuth = require('./middleware/requireAuth')
 const requireAdminAuth = require('./middleware/requireAdminAuth')
 
@@ -33,7 +38,23 @@ app.use(cors({
 // Connect to database
 connectToDB();
 
-// Routing
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}))
+
+const multer = require("multer");
+const path = require("path");
+const storage = multer.diskStorage({
+  destination: function(req, file, cb){
+    cb(null, path.join(__dirname, './public/userImages'))
+  },
+  filename: function(req, file, cb){
+    const name = Date.now()+'-'+file.originalname; 
+    cb(null, name)
+  }
+})
+const upload = multer({
+  storage: storage
+})
 
 // Admins
 app.get("/admins", adminController.fetchAdmins);
@@ -55,7 +76,7 @@ app.delete("/users/:id", userController.deleteUser);
 
 // Team
 app.get("/team", teamController.fetchTeam);
-app.post("/team", teamController.createTeam);
+app.post("/team", upload.single('image'), teamController.createTeam);
 app.put("/team/:id", teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
 

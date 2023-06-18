@@ -1,5 +1,4 @@
 const Team = require("../models/team");
-const multer = require("multer");
 
 const fetchTeam = async (req, res) => {
   const team = await Team.find();
@@ -8,7 +7,8 @@ const fetchTeam = async (req, res) => {
 
 async function createTeam(req, res) {
   try{
-    const {fullName, email, image, linkedin, github, figma} = req.body;
+    const {fullName, email, linkedin, github, figma} = req.body;
+    const image = req.body.image ;
     const team = await Team.create({fullName, email, image, linkedin, github, figma });
     res.json({ team: team })
   }
@@ -43,15 +43,6 @@ async function createTeam(req, res) {
 //   }
 // };
 
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, "../../client/public/uploads/");
-  },
-  fileName: (req, file, callback) => {
-    callback(null, file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, callback) => {

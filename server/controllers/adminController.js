@@ -13,6 +13,11 @@ const fetchAdmin = async (req, res) => {
   res.json({ admin: admin });
 };
 
+// const fetchAdmin = async (req, res) => {
+//   const admin = await Admins.findById( {_id:req.session.user_id} );
+//   res.json({ admin: admin });
+// };
+
 const createAdmin = async (req, res) => {
   try{
     const {firstName, lastName, email, password} = req.body;

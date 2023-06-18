@@ -112,6 +112,8 @@ export default function Team() {
             </h1>
             <form
               onSubmit={store.editToggle ? store.updateTeam : store.addTeam}
+              action="/team"
+              method="post"
               encType="multipart/form-data"
               className="flex flex-col gap-5"
             >
@@ -167,7 +169,7 @@ export default function Team() {
                     ? store.handleUpdateFieldChange
                     : store.updateCreateForm
                 }
-                type="text"
+                type="file"
                 name="image"
               />
               <FormControl variant="outlined">
