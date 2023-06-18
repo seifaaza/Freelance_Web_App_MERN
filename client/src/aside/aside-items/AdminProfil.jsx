@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -17,6 +16,14 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 export default function AdminProfil() {
+  // const getCurrentUser = async function () {
+  //   const currentUser = await Parse.User.current();
+  //   let user = "";
+  //   currentUser && currentUser !== null
+  //     ? (user = currentUser.get("fullName"))
+  //     : null;
+  //   return currentUser;
+  // };
   const [passwordVisibility, setPasswordVisibility] = useState("invisible");
   const [modalOpen, setModalOpen] = useState(false);
 

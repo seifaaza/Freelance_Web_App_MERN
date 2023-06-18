@@ -40,10 +40,10 @@ app.get("/admins", adminController.fetchAdmins);
 app.post("/admin-login", adminController.login);
 app.get("/admin-check-auth",requireAdminAuth, adminController.checkAuth);
 app.get("/admin-logout", adminController.logout); 
-app.get("/admins/:id", adminController.fetchAdmin);
-app.post("/admins", adminController.createAdmin);
-app.put("/admins/:id", adminController.updateAdmin);
-app.delete("/admins/:id", adminController.deleteAdmin);
+app.get("/admins/:id",  adminController.fetchAdmin);
+app.post("/admins",  adminController.createAdmin);
+app.put("/admins/:id",  adminController.updateAdmin);
+app.delete("/admins/:id",  adminController.deleteAdmin);
 
 // Users
 app.post("/signup", userController.signup);

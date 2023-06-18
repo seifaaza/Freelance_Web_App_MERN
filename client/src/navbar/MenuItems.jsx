@@ -11,6 +11,11 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import GroupsIcon from "@mui/icons-material/Groups";
+import InfoIcon from "@mui/icons-material/Info";
+import LaptopMacIcon from "@mui/icons-material/LaptopMac";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 import authStore from "../stores/AuthStore";
 
 export default function MenuItems({ items }) {
@@ -137,6 +142,17 @@ export default function MenuItems({ items }) {
             className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
             to={items.url}
           >
+            {items.url === "/about" ? (
+              <InfoIcon />
+            ) : items.url === "/team" ? (
+              <GroupsIcon />
+            ) : items.url === "/freelance" ? (
+              <LaptopMacIcon />
+            ) : items.url === "/marketplace" ? (
+              <StorefrontIcon />
+            ) : items.url === "/creative-network" ? (
+              <TipsAndUpdatesIcon />
+            ) : null}
             <span> {items.title} </span>
           </NavLink>
         )}
