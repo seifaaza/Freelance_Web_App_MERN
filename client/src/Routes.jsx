@@ -13,6 +13,8 @@ import Profile from "./pages/profile/Profile";
 import RequireAuth from "./authentication/RequireAuth";
 import AdminLogin from "./pages/dashboard/AdminLogin";
 import AdminRequireAuth from "./authentication/AdminRequireAuth";
+import MyBag from "./pages/bag/MyBag";
+import Saved from "./pages/saved/Saved";
 
 function MyRoutes() {
   return (
@@ -33,6 +35,8 @@ function MyRoutes() {
           </RequireAuth>
         }
       />
+      <Route path="/saved" element={<Saved />} />
+      <Route path="/my-bag" element={<MyBag />} />
       <Route path="*" element={<Error />} />
       <Route path="admin-login" element={<AdminLogin />} />
       <Route

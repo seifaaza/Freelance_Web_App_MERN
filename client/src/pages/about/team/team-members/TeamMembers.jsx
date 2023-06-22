@@ -20,9 +20,7 @@ export default function TeamMembers() {
           >
             <div
               style={{
-                backgroundImage: `url(/assets/images/${
-                  item.image ? item.image : "default-avatar.svg"
-                })`,
+                backgroundImage: `url(/assets/images/default-avatar.svg)`,
               }}
               className="w-16 h-16 tablet:w-20 tablet:h-20 laptop:w-28 laptop:h-28  rounded-full bg-cover bg-center "
             ></div>

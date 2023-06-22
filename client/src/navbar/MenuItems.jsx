@@ -16,6 +16,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import authStore from "../stores/AuthStore";
 
 export default function MenuItems({ items }) {
@@ -119,6 +120,14 @@ export default function MenuItems({ items }) {
             to={items.url}
           >
             <ShoppingBagIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : items.url && items.path === "saved" ? (
+          <NavLink
+            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+          >
+            <BookmarkIcon />
             <span> {items.title} </span>
           </NavLink>
         ) : !items.url && items.path === "logout" ? (

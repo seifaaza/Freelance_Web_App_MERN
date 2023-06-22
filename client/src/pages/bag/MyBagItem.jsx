@@ -12,7 +12,7 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 
-export default function MarketItem(props) {
+export default function MyBagItem(props) {
   const [open, setOpen] = useState(false);
   const [addItem, setAddItem] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -116,7 +116,7 @@ export default function MarketItem(props) {
   );
 }
 
-MarketItem.propTypes = {
+MyBagItem.propTypes = {
   freelancer: PropTypes.string,
   image: PropTypes.string,
   price: PropTypes.string,

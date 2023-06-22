@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Chip from "@mui/material/Chip";
@@ -18,11 +19,115 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import TeamStore from "../../stores/TeamStore";
 
 export default function Team() {
-  const store = TeamStore();
+  // const store = TeamStore();
+
+  // useEffect(() => {
+  //   fetchTeam();
+  // }, []);
+
+  const [team, setTeam] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editToggle, setEditToggle] = useState(false);
+  const [createForm, setCreateForm] = useState({
+    fullName: "",
+    image: "",
+    email: "",
+    social: "",
+  });
+  const [updateForm, setUpdateForm] = useState({
+    _id: null,
+    fullName: "",
+    image: "",
+    email: "",
+    social: "",
+  });
 
   useEffect(() => {
-    store.fetchTeam();
+    fetchTeam();
   }, []);
+
+  const fetchTeam = async () => {
+    const res = await axios.get("/team");
+    setTeam(res.data.team);
+  };
+
+  const addTeam = async (e) => {
+    e.preventDefault();
+    const res = await axios.post("/team", createForm);
+    setTeam([...team, res.data.team]);
+    setCreateForm({
+      fullName: "",
+      image: "",
+      email: "",
+      social: "",
+    });
+    setModalOpen(false);
+  };
+  console.log(createForm);
+
+  const updateCreateForm = (e) => {
+    setCreateForm({ ...createForm, [e.target.name]: e.target.value });
+  };
+
+  const handleImage = (e) => {
+    setCreateForm({ ...createForm, image: e.target.files[0] });
+    // createForm.append("image", e.target.files[0]);
+  };
+
+  const handleUpdateFieldChange = (e) => {
+    const { name, value } = e.target;
+    setUpdateForm({
+      ...updateForm,
+      [name]: value,
+    });
+  };
+
+  const toggleUpdate = (item) => {
+    setUpdateForm({
+      _id: item._id,
+      fullName: item.fullName,
+      image: item.image,
+      email: item.email,
+      social: item.social,
+    });
+  };
+
+  const updateTeam = async (e) => {
+    e.preventDefault();
+    const { fullName, email, image, social } = updateForm;
+    const res = await axios.put(`/team/${updateForm._id}`, {
+      fullName,
+      email,
+      image,
+      social,
+    });
+    const newTeam = [...team];
+    const teamIndex = team.findIndex((team) => {
+      return team._id === updateForm._id;
+    });
+    newTeam[teamIndex] = res.data.team;
+    setTeam(newTeam);
+    setModalOpen(false);
+    setUpdateForm({
+      _id: null,
+      fullName: "",
+      image: "",
+      email: "",
+      social: "",
+    });
+  };
+
+  const deleteTeam = async (_id) => {
+    const res = await axios.delete(`/team/${_id}`);
+    const newTeam = [...team].filter((team) => {
+      return team._id !== _id;
+    });
+    setTeam(newTeam);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
 
   return (
     <>
@@ -38,11 +143,11 @@ export default function Team() {
             </tr>
           </thead>
           <tbody>
-            {store.team &&
-              store.team.map((item) => {
+            {team &&
+              team.map((item) => {
                 return (
                   <tr
-                    key={store.team._id}
+                    key={team._id}
                     className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                   >
                     <td className="px-4 py-3">{item.image}</td>
@@ -66,7 +171,7 @@ export default function Team() {
                       <IconButton
                         aria-label="edit"
                         onClick={() => {
-                          store.toggleUpdate(item);
+                          toggleUpdate(item);
                         }}
                         className="text-violet"
                       >
@@ -75,7 +180,7 @@ export default function Team() {
                       <IconButton
                         aria-label="delete"
                         className="text-danger"
-                        onClick={() => store.deleteTeam(item._id)}
+                        onClick={() => deleteTeam(item._id)}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -90,14 +195,16 @@ export default function Team() {
           size="large"
           endIcon={<PersonAddIcon />}
           className="btn btn-contained h-fit w-fit"
-          onClick={store.addSwitch}
+          onClick={() => {
+            setModalOpen(true);
+          }}
         >
           Add
         </Button>
       </div>
       <Modal
-        open={store.modalOpen}
-        onClose={store.handleClose}
+        open={modalOpen}
+        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -108,25 +215,19 @@ export default function Team() {
           <div className="flex flex-col gap-5 w-full font-main text-slate-700 dark:text-white laptop:max-w-sm">
             <h1 className="text-3xl text-center ">
               {" "}
-              {store.editToggle ? "Edit" : "Add"}
+              {editToggle ? "Edit" : "Add"}
             </h1>
             <form
-              onSubmit={store.editToggle ? store.updateTeam : store.addTeam}
               action="/team"
               method="post"
+              onSubmit={editToggle ? updateTeam : addTeam}
               encType="multipart/form-data"
               className="flex flex-col gap-5"
             >
               <TextField
-                value={
-                  store.editToggle
-                    ? store.updateForm.fullName
-                    : store.createForm.fullName
-                }
+                value={editToggle ? updateForm.fullName : createForm.fullName}
                 onChange={
-                  store.editToggle
-                    ? store.handleUpdateFieldChange
-                    : store.updateCreateForm
+                  editToggle ? handleUpdateFieldChange : updateCreateForm
                 }
                 name="fullName"
                 type="text"
@@ -137,40 +238,24 @@ export default function Team() {
                 required
               />{" "}
               <TextField
-                error={store.emailError ? true : false}
-                value={
-                  store.editToggle
-                    ? store.updateForm.email
-                    : store.createForm.email
-                }
+                // error={emailError ? true : false}
+                value={editToggle ? updateForm.email : createForm.email}
                 onChange={
-                  store.editToggle
-                    ? store.handleUpdateFieldChange
-                    : store.updateCreateForm
+                  editToggle ? handleUpdateFieldChange : updateCreateForm
                 }
                 name="email"
                 type="email"
-                color={store.emailError ? "error" : "secondary"}
+                // color={emailError ? "error" : "secondary"}
                 id="outlined-textarea"
-                label={
-                  store.emailError ? "This e-mail is already used ! " : "E-mail"
-                }
+                // label={emailError ? "This e-mail is already used ! " : "E-mail"}
                 placeholder="Your E-mail"
                 required
               />{" "}
               <input
-                value={
-                  store.editToggle
-                    ? store.updateForm.image
-                    : store.createForm.image
-                }
-                onChange={
-                  store.editToggle
-                    ? store.handleUpdateFieldChange
-                    : store.updateCreateForm
-                }
                 type="file"
                 name="image"
+                accept=".png, .jpg, .jpeg"
+                onChange={editToggle ? handleUpdateFieldChange : handleImage}
               />
               <FormControl variant="outlined">
                 <InputLabel
@@ -180,15 +265,9 @@ export default function Team() {
                   Linkedin (optional)
                 </InputLabel>
                 <OutlinedInput
-                  value={
-                    store.editToggle
-                      ? store.updateForm.linkedin
-                      : store.createForm.linkedin
-                  }
+                  value={editToggle ? updateForm.linkedin : createForm.linkedin}
                   onChange={
-                    store.editToggle
-                      ? store.handleUpdateFieldChange
-                      : store.updateCreateForm
+                    editToggle ? handleUpdateFieldChange : updateCreateForm
                   }
                   name="linkedin"
                   id="outlined-adornment-linkedin"
@@ -214,15 +293,9 @@ export default function Team() {
                   Github (optional)
                 </InputLabel>
                 <OutlinedInput
-                  value={
-                    store.editToggle
-                      ? store.updateForm.github
-                      : store.createForm.github
-                  }
+                  value={editToggle ? updateForm.github : createForm.github}
                   onChange={
-                    store.editToggle
-                      ? store.handleUpdateFieldChange
-                      : store.updateCreateForm
+                    editToggle ? handleUpdateFieldChange : updateCreateForm
                   }
                   name="github"
                   id="outlined-adornment-github"
@@ -248,15 +321,9 @@ export default function Team() {
                   Figma (optional)
                 </InputLabel>
                 <OutlinedInput
-                  value={
-                    store.editToggle
-                      ? store.updateForm.figma
-                      : store.createForm.figma
-                  }
+                  value={editToggle ? updateForm.figma : createForm.figma}
                   onChange={
-                    store.editToggle
-                      ? store.handleUpdateFieldChange
-                      : store.updateCreateForm
+                    editToggle ? handleUpdateFieldChange : updateCreateForm
                   }
                   name="figma"
                   id="outlined-adornment-figma"
@@ -280,7 +347,7 @@ export default function Team() {
                   size="large"
                   endIcon={<CloseIcon />}
                   className="btn btn-outlined-danger grow"
-                  onClick={store.handleClose}
+                  onClick={handleClose}
                 >
                   Cancel
                 </Button>
@@ -291,7 +358,7 @@ export default function Team() {
                   endIcon={<CheckIcon />}
                   className="btn btn-contained grow"
                 >
-                  {store.editToggle ? "Edit" : "Add"}
+                  {editToggle ? "Edit" : "Add"}
                 </Button>
               </div>
             </form>

@@ -51,10 +51,10 @@ export default function AdminProfil() {
             {/* {admin && admin.firstName} */}
           </h3>
           <div className="flex flex-col text-small dark:text-white">
-            <h4 className=" ">{/* {admin && admin.email} */}</h4>
+            <h4 className=" text-small-heading">Seifeddine AAZA</h4>
             <div className="flex gap-5">
               <span className="flex items-center">
-                <h4 className=" whitespace-nowrap">Password :</h4>
+                <h4 className=" whitespace-nowrap">Password : abc123</h4>
                 <IconButton
                   aria-label="Example"
                   onClick={handleThemeSwitch}
@@ -77,6 +77,7 @@ export default function AdminProfil() {
           </div>
         </div>
       </div>
+
       <div className="flex w-fit gap-4">
         <Button
           variant="outlined"
@@ -95,7 +96,7 @@ export default function AdminProfil() {
           endIcon={<DeleteIcon />}
           className="btn btn-contained-danger"
         >
-          Delete
+          Delete my account
         </Button>
       </div>
       <Modal

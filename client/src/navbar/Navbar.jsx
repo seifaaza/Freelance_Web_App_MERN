@@ -46,7 +46,7 @@ export default function Navbar() {
             to="/profile"
             onClick={ScrollToTop}
           >
-            {/* <img
+            <img
               src="/assets/svg/logo/logo.svg"
               alt=""
               className="h-10 selection:bg-transparent"
@@ -54,12 +54,12 @@ export default function Navbar() {
                 setNavOpen(false);
                 document.body.classList.remove("fixed");
               }}
-            /> */}
-            <Avatar
+            />
+            {/* <Avatar
               alt="seif"
               src="/assets/images/mohamed.jpg"
               className="border-2 "
-            ></Avatar>
+            ></Avatar> */}
           </Link>
           <div
             className={`cursor-pointer nav-icon ${

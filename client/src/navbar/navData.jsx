@@ -56,8 +56,13 @@ export const navData = [
       },
       {
         title: "My bag",
-        url: "my-bag",
+        url: "/my-bag",
         path: "my-bag",
+      },
+      {
+        title: "Saved",
+        url: "/saved",
+        path: "saved",
       },
       {
         title: "Logout",

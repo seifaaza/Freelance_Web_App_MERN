@@ -4,8 +4,8 @@ const connectToDB = require("./config/connectToDb");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-
-
+const uploadMiddleware = require('./middleware/MulterMiddleware')
+const Team = require('./models/team')
 
 //Authentication
 const requireAuth = require('./middleware/requireAuth')
@@ -41,20 +41,25 @@ connectToDB();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}))
 
-const multer = require("multer");
-const path = require("path");
-const storage = multer.diskStorage({
-  destination: function(req, file, cb){
-    cb(null, path.join(__dirname, './public/userImages'))
-  },
-  filename: function(req, file, cb){
-    const name = Date.now()+'-'+file.originalname; 
-    cb(null, name)
-  }
-})
-const upload = multer({
-  storage: storage
-})
+// const multer = require("multer");
+// const path = require("path");
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "./public/uploads");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, `${uuidv4()}_${path.extname(file.originalname)}`);
+//   },
+// });
+// const fileFilter = (req, file, cb) => {
+//   const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+//   if (allowedFileTypes.includes(file.mimetype)) {
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+// };
+// const uploadMiddleware = multer({ storage, fileFilter });
 
 // Admins
 app.get("/admins", adminController.fetchAdmins);
@@ -76,7 +81,7 @@ app.delete("/users/:id", userController.deleteUser);
 
 // Team
 app.get("/team", teamController.fetchTeam);
-app.post("/team", upload.single('image'), teamController.createTeam);
+app.post("/team", uploadMiddleware.single('image'), teamController.createTeam);
 app.put("/team/:id", teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
 

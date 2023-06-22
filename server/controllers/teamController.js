@@ -1,4 +1,5 @@
 const Team = require("../models/team");
+const path = require("path");
 
 const fetchTeam = async (req, res) => {
   const team = await Team.find();
@@ -8,7 +9,7 @@ const fetchTeam = async (req, res) => {
 async function createTeam(req, res) {
   try{
     const {fullName, email, linkedin, github, figma} = req.body;
-    const image = req.body.image ;
+    const image = req.file.filename ;
     const team = await Team.create({fullName, email, image, linkedin, github, figma });
     res.json({ team: team })
   }
