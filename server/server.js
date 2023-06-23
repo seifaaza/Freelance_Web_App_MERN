@@ -41,26 +41,6 @@ connectToDB();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}))
 
-// const multer = require("multer");
-// const path = require("path");
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "./public/uploads");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, `${uuidv4()}_${path.extname(file.originalname)}`);
-//   },
-// });
-// const fileFilter = (req, file, cb) => {
-//   const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
-//   if (allowedFileTypes.includes(file.mimetype)) {
-//     cb(null, true);
-//   } else {
-//     cb(null, false);
-//   }
-// };
-// const uploadMiddleware = multer({ storage, fileFilter });
-
 // Admins
 app.get("/admins", adminController.fetchAdmins);
 app.post("/admin-login", adminController.login);
@@ -79,11 +59,25 @@ app.get("/logout", userController.logout);
 app.get("/users", userController.fetchUsers);
 app.delete("/users/:id", userController.deleteUser);
 
+app.use('/team', express.static('uploads'))
 // Team
 app.get("/team", teamController.fetchTeam);
-app.post("/team", uploadMiddleware.single('image'), teamController.createTeam);
+// app.post("/team", uploadMiddleware.single('image'), teamController.createTeam);
 app.put("/team/:id", teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
+app.post("/team", uploadMiddleware.single("image"), (req, res) => {
+  const image = req.file.filename;
+  const {fullName, email, linkedin, github, figma} = req.body;
+  console.log(image);
+  Team.create({fullName, email, image, linkedin, github, figma })
+    .then((data) => {
+      console.log("Uploaded Successfully...");
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => console.log(err));
+});
+
 
 // Start server
 app.listen(process.env.PORT);

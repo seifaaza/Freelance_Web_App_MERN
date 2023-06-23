@@ -19,42 +19,6 @@ async function createTeam(req, res) {
   }
 }
 
-// const createTeam = async (req, res) => {
-//   try{
-//     const fullName = req.body.fullName;
-//     const email = req.body.email;
-//     const image = req.body.image;
-//     const linkedin = req.body.linkedin;
-//     const github = req.body.linkedin;
-//     const figma = req.body.linkedin;
-//     const team = await Team.create({
-//       fullName: fullName,
-//       image: image,
-//       email: email,
-//       linkedin: linkedin,
-//       github: github,
-//       figma: figma,
-//     });
-//     res.json({ team: team });
-//     res.sendStatus(200);
-//   }
-//   catch(err) {
-//     console.log(err);
-//     res.sendStatus(400)
-//   }
-// };
-
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, callback) => {
-//     callback(null, "../../client/public/uploads/");
-//   },
-//   fileName: (req, file, callback) => {
-//     callback(null, file.originalName);
-//   },
-// });
-// const upload = multer({ storage: storage });
-
 const updateTeam = async (req, res) => {
   teamId = req.params.id;
 

@@ -17,6 +17,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import TeamStore from "../../stores/TeamStore";
+import Avatar from "@mui/material/Avatar";
 
 export default function Team() {
   // const store = TeamStore();
@@ -51,9 +52,16 @@ export default function Team() {
     setTeam(res.data.team);
   };
 
+  const updateCreateForm = (e) => {
+    setCreateForm({ ...createForm, [e.target.name]: e.target.value });
+  };
+
   const addTeam = async (e) => {
     e.preventDefault();
-    const res = await axios.post("/team", createForm);
+    const formdata = new FormData();
+    formdata.append("image", createForm.image);
+    const res = await axios.post("/team", formdata);
+
     setTeam([...team, res.data.team]);
     setCreateForm({
       fullName: "",
@@ -64,15 +72,6 @@ export default function Team() {
     setModalOpen(false);
   };
   console.log(createForm);
-
-  const updateCreateForm = (e) => {
-    setCreateForm({ ...createForm, [e.target.name]: e.target.value });
-  };
-
-  const handleImage = (e) => {
-    setCreateForm({ ...createForm, image: e.target.files[0] });
-    // createForm.append("image", e.target.files[0]);
-  };
 
   const handleUpdateFieldChange = (e) => {
     const { name, value } = e.target;
@@ -150,7 +149,13 @@ export default function Team() {
                     key={team._id}
                     className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                   >
-                    <td className="px-4 py-3">{item.image}</td>
+                    <td className="px-4 py-3">
+                      <Avatar
+                        alt={`${item.fullName} photo`}
+                        src={`http://localhost:3000/uploads/0ad70a64-5c36-4e35-94ad-8789659f5425_.jpg`}
+                        sx={{ width: 50, height: 50 }}
+                      />
+                    </td>
                     <td className="px-4 py-3">{item.fullName}</td>
                     <td className="px-4 py-3">{item.email}</td>
                     <td className="px-4 py-3">
@@ -254,8 +259,12 @@ export default function Team() {
               <input
                 type="file"
                 name="image"
-                accept=".png, .jpg, .jpeg"
-                onChange={editToggle ? handleUpdateFieldChange : handleImage}
+                // onChange={editToggle ? handleUpdateFieldChange : handleImage}
+                // onChange={(e) => handleImage(e)}
+
+                onChange={(e) =>
+                  setCreateForm({ ...createForm, image: e.target.files[0] })
+                }
               />
               <FormControl variant="outlined">
                 <InputLabel

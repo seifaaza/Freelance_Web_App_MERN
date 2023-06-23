@@ -5,12 +5,8 @@ const teamSchema = new mongoose.Schema({
   image: String,
   email: {
     type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    index: true
+   
   },
-  password: String,
   linkedin: String,
   github: String,
   figma: String,
