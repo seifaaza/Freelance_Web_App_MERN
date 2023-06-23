@@ -60,6 +60,8 @@ export default function Team() {
     e.preventDefault();
     const formdata = new FormData();
     formdata.append("image", createForm.image);
+    formdata.append("email", createForm.email);
+    formdata.append("fullName", createForm.fullName);
     const res = await axios.post("/team", formdata);
 
     setTeam([...team, res.data.team]);
