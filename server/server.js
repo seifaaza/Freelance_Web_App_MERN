@@ -34,6 +34,7 @@ app.use(cors({
   origin: true,
   credentials: true
 }));
+app.use(express.static('public'))
 
 // Connect to database
 connectToDB();

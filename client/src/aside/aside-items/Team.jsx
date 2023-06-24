@@ -20,12 +20,6 @@ import TeamStore from "../../stores/TeamStore";
 import Avatar from "@mui/material/Avatar";
 
 export default function Team() {
-  // const store = TeamStore();
-
-  // useEffect(() => {
-  //   fetchTeam();
-  // }, []);
-
   const [team, setTeam] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editToggle, setEditToggle] = useState(false);
@@ -154,7 +148,7 @@ export default function Team() {
                     <td className="px-4 py-3">
                       <Avatar
                         alt={`${item.fullName} photo`}
-                        src={`http://localhost:3000/uploads/0ad70a64-5c36-4e35-94ad-8789659f5425_.jpg`}
+                        src={`http://localhost:3000/uploads/${item.image}`}
                         sx={{ width: 50, height: 50 }}
                       />
                     </td>
