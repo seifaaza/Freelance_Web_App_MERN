@@ -16,6 +16,7 @@ const teamStore = create((set) => ({
     github: "",
     figma: "",
   },
+  image: null,
 
   updateForm: {
     _id: null,
@@ -42,8 +43,21 @@ const teamStore = create((set) => ({
   addTeam: async (e) => {
     e.preventDefault();
     try {
-      const { createForm, team } = teamStore.getState();
-      const res = await axios.post("/team", createForm);
+      const formdata = new FormData();
+      const { createForm, team, image } = teamStore.getState();
+      formdata.append("email", createForm.email);
+      formdata.append("fullName", createForm.fullName);
+      formdata.append("linkedin", createForm.linkedin);
+      formdata.append("figma", createForm.figma);
+      formdata.append("github", createForm.github);
+      formdata.append("image", createForm.image);
+      console.log(createForm.email);
+      console.log(createForm.fullName);
+      console.log(createForm.linkedin);
+      console.log(createForm.figma);
+      console.log(createForm.github);
+      console.log(image);
+      const res = await axios.post("/team", formdata);
       set({
         team: [...team, res.data.team],
         createForm: {
@@ -74,14 +88,8 @@ const teamStore = create((set) => ({
   },
 
   handleImage: (e) => {
-    const { name, value } = e.target.files[0];
-    set((state) => {
-      return {
-        createForm: {
-          ...state.createForm,
-          [name]: value,
-        },
-      };
+    set({
+      image: e.target.files[0],
     });
   },
 
@@ -169,7 +177,18 @@ const teamStore = create((set) => ({
   },
 
   addSwitch: () => {
-    set({ editToggle: false, modalOpen: true });
+    set({
+      editToggle: false,
+      modalOpen: true,
+      createForm: {
+        fullName: "",
+        email: "",
+        image: "",
+        linkedin: "",
+        github: "",
+        figma: "",
+      },
+    });
   },
 
   editSwitch: () => {

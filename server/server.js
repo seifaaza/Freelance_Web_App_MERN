@@ -67,7 +67,7 @@ app.get("/team", teamController.fetchTeam);
 app.put("/team/:id", teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
 app.post("/team", uploadMiddleware.single("image"), (req, res) => {
-  const image = req.file.filename;
+  const image = !req.file ? "avatar"  : req.file.filename ;
   const {fullName, email, linkedin, github, figma} = req.body;
   console.log(image);
   Team.create({fullName, email, image, linkedin, github, figma })

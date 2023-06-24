@@ -6,19 +6,6 @@ const fetchTeam = async (req, res) => {
   res.json({ team: team });
 };
 
-async function createTeam(req, res) {
-  try{
-    const {fullName, email, linkedin, github, figma} = req.body;
-    const image = req.file.filename ;
-    const team = await Team.create({fullName, email, image, linkedin, github, figma });
-    res.json({ team: team })
-  }
-  catch(err){
-    console.log(err);
-    res.sendStatus(400)
-  }
-}
-
 const updateTeam = async (req, res) => {
   teamId = req.params.id;
 
@@ -53,7 +40,6 @@ const deleteTeam = async (req, res) => {
 
 module.exports = {
   fetchTeam: fetchTeam,
-  createTeam: createTeam,
   updateTeam: updateTeam,
   deleteTeam: deleteTeam,
 };

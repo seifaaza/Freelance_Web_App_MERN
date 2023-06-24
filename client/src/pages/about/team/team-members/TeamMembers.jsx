@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import TeamStore from "../../../../stores/TeamStore";
+import Avatar from "@mui/material/Avatar";
 
 export default function TeamMembers() {
   const store = TeamStore();
@@ -18,12 +19,15 @@ export default function TeamMembers() {
             key={index}
             className="laptop:w-1/4 flex flex-col tablet:flex-row laptop:flex-col items-center gap-5 bg-orange-opacity text-slate-700 tablet:max-w-lg p-4 tablet:p-5"
           >
-            <div
-              style={{
-                backgroundImage: `url(http://localhost:3000/uploads/${item.image})`,
-              }}
-              className="w-16 h-16 tablet:w-20 tablet:h-20 laptop:w-28 laptop:h-28  rounded-full bg-cover bg-center "
-            ></div>
+            <Avatar
+              alt={`${item.fullName} photo`}
+              src={
+                item.image == "avatar"
+                  ? `/assets/images/default-avatar.svg`
+                  : `http://localhost:3000/uploads/${item.image}`
+              }
+              sx={{ width: 150, height: 150 }}
+            />
 
             <div className="flex flex-col items-center tablet:items-start laptop:items-center gap-5 ">
               <div className="flex flex-col items-center tablet:items-start laptop:items-center">
@@ -77,7 +81,7 @@ export default function TeamMembers() {
   };
   return (
     <div className="flex flex-col items-center laptop:flex-row laptop:gap-8">
-      <div className="flex flex-col laptop:flex-row flex-wrap laptop:w-full">
+      <div className="flex flex-col laptop:flex-row justify-center flex-wrap laptop:w-full">
         <TeamItems />
       </div>
     </div>
