@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Chip from "@mui/material/Chip";
@@ -18,71 +17,14 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import TeamStore from "../../stores/TeamStore";
 import Avatar from "@mui/material/Avatar";
+import ImageIcon from "@mui/icons-material/Image";
 
 export default function Team() {
   const store = TeamStore();
-  const [team, setTeam] = useState(null);
-  const [image, setImage] = useState(null);
 
   useEffect(() => {
     store.fetchTeam();
   }, []);
-
-  const addTeam = async (e) => {
-    e.preventDefault();
-    const formdata = new FormData();
-    formdata.append("image", image);
-    formdata.append("fullName", store.createForm.fullName);
-    formdata.append("email", store.createForm.email);
-    formdata.append("linkedin", store.createForm.linkedin);
-    formdata.append("github", store.createForm.github);
-    formdata.append("figma", store.createForm.figma);
-    const res = await axios.post("/team", formdata);
-    store.handleClose();
-    setTeam([...team, res.data.team]);
-    store.createForm({
-      fullName: "",
-      image: "",
-      email: "",
-      linkedin: "",
-      github: "",
-      figma: "",
-    });
-  };
-
-  // const updateTeam = async (e) => {
-  //   e.preventDefault();
-  //   const {
-  //     updateForm: { _id, fullName, email, image, linkedin, github, figma },
-  //     team,
-  //   } = teamStore.getState();
-  //   const res = await axios.put(`/team/${_id}`, {
-  //     fullName,
-  //     email,
-  //     image,
-  //     linkedin,
-  //     github,
-  //     figma,
-  //   });
-  //   const newTeam = [...team];
-  //   const teamIndex = team.findIndex((team) => {
-  //     return team._id === _id;
-  //   });
-  //   newTeam[teamIndex] = res.data.team;
-  //   set({
-  //     team: newTeam,
-  //     updateForm: {
-  //       _id: null,
-  //       fullName: "",
-  //       image: "",
-  //       email: "",
-  //       linkedin: "",
-  //       github: "",
-  //       figma: "",
-  //     },
-  //     modalOpen: false,
-  //   });
-  // };
 
   return (
     <>
@@ -99,16 +41,20 @@ export default function Team() {
           </thead>
           <tbody>
             {store.team &&
-              store.team.map((item) => {
+              store.team.map((item, index) => {
                 return (
                   <tr
-                    key={store.team._id}
+                    key={index}
                     className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                   >
                     <td className="px-4 py-3">
                       <Avatar
                         alt={`${item.fullName} photo`}
-                        src={`http://localhost:3000/uploads/${item.image}`}
+                        src={
+                          item.image !== "avatar"
+                            ? `http://localhost:3000/uploads/${item.image}`
+                            : null
+                        }
                         sx={{ width: 50, height: 50 }}
                       />
                     </td>
@@ -177,9 +123,7 @@ export default function Team() {
               {store.editToggle ? "Edit" : "Add"}
             </h1>
             <form
-              action="/team"
-              method="post"
-              onSubmit={addTeam}
+              onSubmit={store.editToggle ? store.updateTeam : store.addTeam}
               encType="multipart/form-data"
               className="flex flex-col gap-5"
             >
@@ -222,12 +166,39 @@ export default function Team() {
                 placeholder="Your E-mail"
                 required
               />{" "}
-              <input
-                type="file"
-                name="image"
-                onChange={(e) => setImage(e.target.files[0])}
-                // onChange={store.handleImage}
-              />
+              <FormControl variant="outlined" className="input-image">
+                <OutlinedInput
+                  className="input-image text-ellipsis"
+                  color="secondary"
+                  value={store.editToggle ? store.image : null}
+                  startAdornment={
+                    <div className="w-full">
+                      <input
+                        className="input-file"
+                        id="my-file"
+                        type="file"
+                        name="image"
+                        onChange={
+                          store.editToggle
+                            ? store.handleUpdateFieldChange
+                            : store.handleImage
+                        }
+                      />{" "}
+                      <div className="flex gap-4 text-violet-600">
+                        <ImageIcon />
+                        <label
+                          tabIndex="0"
+                          htmlFor="my-file"
+                          className="whitespace-nowrap"
+                        >
+                          Choose image (Optional)
+                        </label>
+                        <p className="file-return"></p>
+                      </div>
+                    </div>
+                  }
+                />
+              </FormControl>
               <FormControl variant="outlined">
                 <InputLabel
                   color="secondary"

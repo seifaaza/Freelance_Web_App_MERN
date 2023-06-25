@@ -36,10 +36,10 @@ export default function Admins() {
           </thead>
           <tbody>
             {store.admins &&
-              store.admins.map((item) => {
+              store.admins.map((item, index) => {
                 return (
                   <tr
-                    key={item._id}
+                    key={index}
                     className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                   >
                     <td className="px-4 py-3">{item.firstName}</td>

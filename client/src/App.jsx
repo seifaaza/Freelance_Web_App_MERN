@@ -51,10 +51,26 @@ function App() {
         alt=""
         className="blur-shape blur-2 dark:opacity-5"
       />
-      <img src="assets/shapes/blur.png" alt="" className="blur-shape blur-3 " />
-      <img src="assets/shapes/blur.png" alt="" className="blur-shape blur-4 " />
-      <img src="assets/shapes/blur.png" alt="" className="blur-shape blur-5 " />
-      <img src="assets/shapes/blur.png" alt="" className="blur-shape blur-6 " />
+      <img
+        src="/assets/shapes/blur.png"
+        alt=""
+        className="blur-shape blur-4 "
+      />
+      <img
+        src="/assets/shapes/blur.png"
+        alt=""
+        className="blur-shape blur-3 "
+      />
+      <img
+        src="/assets/shapes/blur.png"
+        alt=""
+        className="blur-shape blur-5 "
+      />
+      <img
+        src="/assets/shapes/blur.png"
+        alt=""
+        className="blur-shape blur-6 "
+      />
       {/* <img
         src="/assets/shapes/arrow-up.svg"
         className={`${

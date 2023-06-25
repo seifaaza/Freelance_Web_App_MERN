@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import AsideData from "./AsideData";
-import LogoutIcon from "@mui/icons-material/Logout";
 import AdminAuthStore from "../stores/AdminAuthStore";
 
 export default function Aside() {
@@ -20,6 +19,7 @@ export default function Aside() {
           </NavLink>
         ) : (
           <NavLink
+            key={index}
             className={`text-red-600 laptop:hover:text-red-500 `}
             to={item.url}
             onClick={store.logout}

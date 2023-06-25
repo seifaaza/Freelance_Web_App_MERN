@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import axios from "axios";
 
 const teamStore = create((set) => ({
@@ -16,6 +16,7 @@ const teamStore = create((set) => ({
     github: "",
     figma: "",
   },
+
   image: null,
 
   updateForm: {
@@ -40,8 +41,7 @@ const teamStore = create((set) => ({
     set({ team: res.data.team });
   },
 
-  addTeam: async (e) => {
-    e.preventDefault();
+  addTeam: async () => {
     try {
       const formdata = new FormData();
       const { createForm, team, image } = teamStore.getState();
@@ -50,13 +50,7 @@ const teamStore = create((set) => ({
       formdata.append("linkedin", createForm.linkedin);
       formdata.append("figma", createForm.figma);
       formdata.append("github", createForm.github);
-      formdata.append("image", createForm.image);
-      console.log(createForm.email);
-      console.log(createForm.fullName);
-      console.log(createForm.linkedin);
-      console.log(createForm.figma);
-      console.log(createForm.github);
-      console.log(image);
+      formdata.append("image", image);
       const res = await axios.post("/team", formdata);
       set({
         team: [...team, res.data.team],
@@ -128,6 +122,7 @@ const teamStore = create((set) => ({
         github,
         figma,
       },
+      image,
       editToggle: true,
       modalOpen: true,
     });

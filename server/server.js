@@ -63,21 +63,10 @@ app.delete("/users/:id", userController.deleteUser);
 app.use('/team', express.static('uploads'))
 // Team
 app.get("/team", teamController.fetchTeam);
-// app.post("/team", uploadMiddleware.single('image'), teamController.createTeam);
+app.post("/team", uploadMiddleware.single("image"), teamController.createTeam);
 app.put("/team/:id", teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
-app.post("/team", uploadMiddleware.single("image"), (req, res) => {
-  const image = !req.file ? "avatar"  : req.file.filename ;
-  const {fullName, email, linkedin, github, figma} = req.body;
-  console.log(image);
-  Team.create({fullName, email, image, linkedin, github, figma })
-    .then((data) => {
-      console.log("Uploaded Successfully...");
-      console.log(data);
-      res.send(data);
-    })
-    .catch((err) => console.log(err));
-});
+
 
 
 // Start server

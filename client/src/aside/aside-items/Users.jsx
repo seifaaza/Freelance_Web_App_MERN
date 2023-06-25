@@ -15,7 +15,7 @@ export default function Users() {
       <table className=" rounded-md overflow-hidden divide-y divide-slate-800 w-full">
         <thead>
           <tr className="bg-slate-300 dark:bg-slate-600 font-medium">
-            <td className="px-6 py-3">Full name</td>
+            <td className="px-6 py-3">Fullname</td>
             <td className="px-6 py-3"> Email</td>
             <td className="px-6 py-3"> Password</td>
             <td className="px-6 py-3"> Actions</td>
@@ -23,10 +23,10 @@ export default function Users() {
         </thead>
         <tbody>
           {store.users &&
-            store.users.map((item) => {
+            store.users.map((item, index) => {
               return (
                 <tr
-                  key={store.users._id}
+                  key={index}
                   className="odd:bg-slate-100 even:bg-slate-200 dark:odd:bg-slate-800 dark:even:bg-slate-700 "
                 >
                   <td className="px-6 py-3 whitespace-nowrap">

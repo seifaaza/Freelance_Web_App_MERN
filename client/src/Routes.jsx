@@ -15,6 +15,9 @@ import AdminLogin from "./pages/dashboard/AdminLogin";
 import AdminRequireAuth from "./authentication/AdminRequireAuth";
 import MyBag from "./pages/bag/MyBag";
 import Saved from "./pages/saved/Saved";
+import Admins from "./aside/aside-items/Admins";
+import Users from "./aside/aside-items/Users";
+import AdminProfil from "./aside/aside-items/AdminProfil";
 
 function MyRoutes() {
   return (
@@ -48,10 +51,10 @@ function MyRoutes() {
           </AdminRequireAuth>
         }
       >
-        <Route path="admins" />
-        <Route path="users" />
-        <Route path="admin-profile" />
-        <Route path="team" />
+        <Route path="admins" element={<Admins />} />
+        <Route path="users" element={<Users />} />
+        <Route path="admin-profile" element={<AdminProfil />} />
+        <Route path="team" element={<Team />} />
       </Route>
     </Routes>
   );

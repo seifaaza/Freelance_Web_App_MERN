@@ -6,6 +6,20 @@ const fetchTeam = async (req, res) => {
   res.json({ team: team });
 };
 
+const createTeam = async (req, res) => {
+  try {
+  const image = !req.file ? "avatar"  : req.file.filename ;
+  const {fullName, email, linkedin, github, figma} = req.body;
+  Team.create({fullName, email, image, linkedin, github, figma })
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+  }catch(err){
+    console.log(err)
+  }
+}
+
 const updateTeam = async (req, res) => {
   teamId = req.params.id;
 
@@ -40,6 +54,7 @@ const deleteTeam = async (req, res) => {
 
 module.exports = {
   fetchTeam: fetchTeam,
+  createTeam :createTeam,
   updateTeam: updateTeam,
   deleteTeam: deleteTeam,
 };
