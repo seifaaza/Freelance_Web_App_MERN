@@ -21,27 +21,19 @@ const createTeam = async (req, res) => {
 }
 
 const updateTeam = async (req, res) => {
-  teamId = req.params.id;
-
-  const fullName = req.body.fullName;
-  const image = req.body.image;
-  const email = req.body.email;
-  const linkedin = req.body.linkedin;
-  const github = req.body.github;
-  const figma = req.body.figma;
-
-  await Team.findByIdAndUpdate(teamId, {
-    fullName: fullName,
-    image: image,
-    email: email,
-    linkedin: linkedin,
-    github: github,
-    figma: figma,
-  });
-
+  try {
+    teamId = req.params.id;
+  const {fullName, email, linkedin, github, figma} = req.body;
+  const image = !req.file ? "avatar"  : req.file.filename ;
+  await Team.findByIdAndUpdate(teamId, { fullName, image, email, linkedin, github, figma });
   const team = await Team.findById(teamId);
-
   res.json({ team: team });
+  } catch(err) {
+    console.log(err);
+  }
+
+
+
 };
 
 const deleteTeam = async (req, res) => {

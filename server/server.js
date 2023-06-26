@@ -64,7 +64,7 @@ app.use('/team', express.static('uploads'))
 // Team
 app.get("/team", teamController.fetchTeam);
 app.post("/team", uploadMiddleware.single("image"), teamController.createTeam);
-app.put("/team/:id", teamController.updateTeam);
+app.put("/team/:id", uploadMiddleware.single("image"),  teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
 
 

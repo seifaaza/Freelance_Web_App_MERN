@@ -180,7 +180,7 @@ export default function Team() {
                         name="image"
                         onChange={
                           store.editToggle
-                            ? store.handleUpdateFieldChange
+                            ? store.handleUpdateImage
                             : store.handleImage
                         }
                       />{" "}

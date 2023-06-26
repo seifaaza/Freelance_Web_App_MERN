@@ -18,6 +18,7 @@ const teamStore = create((set) => ({
   },
 
   image: null,
+  updateImage: null,
 
   updateForm: {
     _id: null,
@@ -43,8 +44,8 @@ const teamStore = create((set) => ({
 
   addTeam: async () => {
     try {
-      const formdata = new FormData();
       const { createForm, team, image } = teamStore.getState();
+      const formdata = new FormData();
       formdata.append("email", createForm.email);
       formdata.append("fullName", createForm.fullName);
       formdata.append("linkedin", createForm.linkedin);
@@ -84,6 +85,12 @@ const teamStore = create((set) => ({
   handleImage: (e) => {
     set({
       image: e.target.files[0],
+    });
+  },
+
+  handleUpdateImage: (e) => {
+    set({
+      updateImage: e.target.files[0],
     });
   },
 
@@ -133,15 +140,16 @@ const teamStore = create((set) => ({
     const {
       updateForm: { _id, fullName, email, image, linkedin, github, figma },
       team,
+      updateImage,
     } = teamStore.getState();
-    const res = await axios.put(`/team/${_id}`, {
-      fullName,
-      email,
-      image,
-      linkedin,
-      github,
-      figma,
-    });
+    const formdata = new FormData();
+    formdata.append("email", email);
+    formdata.append("fullName", fullName);
+    formdata.append("linkedin", linkedin);
+    formdata.append("figma", figma);
+    formdata.append("github", github);
+    formdata.append("image", updateImage);
+    const res = await axios.put(`/team/${_id}`, formdata);
     const newTeam = [...team];
     const teamIndex = team.findIndex((team) => {
       return team._id === _id;
@@ -161,6 +169,40 @@ const teamStore = create((set) => ({
       modalOpen: false,
     });
   },
+
+  // updateTeam: async (e) => {
+  //   e.preventDefault();
+  //   const {
+  //     updateForm: { _id, fullName, email, image, linkedin, github, figma },
+  //     team,
+  //   } = teamStore.getState();
+  //   const res = await axios.put(`/team/${_id}`, {
+  //     fullName,
+  //     email,
+  //     image,
+  //     linkedin,
+  //     github,
+  //     figma,
+  //   });
+  //   const newTeam = [...team];
+  //   const teamIndex = team.findIndex((team) => {
+  //     return team._id === _id;
+  //   });
+  //   newTeam[teamIndex] = res.data.team;
+  //   set({
+  //     team: newTeam,
+  //     updateForm: {
+  //       _id: null,
+  //       fullName: "",
+  //       image: "",
+  //       email: "",
+  //       linkedin: "",
+  //       github: "",
+  //       figma: "",
+  //     },
+  //     modalOpen: false,
+  //   });
+  // },
 
   deleteTeam: async (_id) => {
     const res = await axios.delete(`/team/${_id}`);
