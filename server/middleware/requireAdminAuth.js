@@ -14,7 +14,7 @@ async function requireAdminAuth(req, res, next) {
 
         req.admin = admin
 
-        next();
+        res.json({ admin: admin });
 
     }catch(err){
         return res.sendStatus(401)

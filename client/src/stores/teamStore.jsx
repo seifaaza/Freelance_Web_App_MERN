@@ -170,40 +170,6 @@ const teamStore = create((set) => ({
     });
   },
 
-  // updateTeam: async (e) => {
-  //   e.preventDefault();
-  //   const {
-  //     updateForm: { _id, fullName, email, image, linkedin, github, figma },
-  //     team,
-  //   } = teamStore.getState();
-  //   const res = await axios.put(`/team/${_id}`, {
-  //     fullName,
-  //     email,
-  //     image,
-  //     linkedin,
-  //     github,
-  //     figma,
-  //   });
-  //   const newTeam = [...team];
-  //   const teamIndex = team.findIndex((team) => {
-  //     return team._id === _id;
-  //   });
-  //   newTeam[teamIndex] = res.data.team;
-  //   set({
-  //     team: newTeam,
-  //     updateForm: {
-  //       _id: null,
-  //       fullName: "",
-  //       image: "",
-  //       email: "",
-  //       linkedin: "",
-  //       github: "",
-  //       figma: "",
-  //     },
-  //     modalOpen: false,
-  //   });
-  // },
-
   deleteTeam: async (_id) => {
     const res = await axios.delete(`/team/${_id}`);
     const { team } = teamStore.getState();

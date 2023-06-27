@@ -10,6 +10,7 @@ const adminAuthStore = create((set) => ({
     email: "",
     password: "",
   },
+  admin: null,
 
   updateLoginForm: (e) => {
     const { name, value } = e.target;
@@ -55,8 +56,13 @@ const adminAuthStore = create((set) => ({
 
   checkAuth: async () => {
     try {
-      await axios("/admin-check-auth", { withCredentials: true });
-      set({ loggedIn: true });
+      const res = await axios.get("/admin-check-auth", {
+        withCredentials: true,
+      });
+      set({
+        loggedIn: true,
+        admin: res.data.admin,
+      });
     } catch (err) {
       set({ loggedIn: false });
     }

@@ -30,8 +30,8 @@ async function login(req, res) {
   try {
     const {email, password} = req.body;
     const admin = await Admins.findOne({email});
+
   if(!admin) return res.sendStatus(401);
-  
   const passwordMatch = bcrypt.compareSync(password, admin.password);
   if(!passwordMatch) return res.sendStatus(401)
   
@@ -44,7 +44,6 @@ async function login(req, res) {
     sameSite : "lax",
     secure : process.env.NODE_ENV === 'production',
   })
-  
   res.sendStatus(200)
 }
 catch(err){
@@ -74,16 +73,14 @@ function logout(req, res) {
 const updateAdmin = async (req, res) => {
   adminId = req.params.id;
 
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-  const password = req.body.password;
+  const {firstName, lastName, email, password} = req.body;
+  const hashedPassword = bcrypt.hashSync(password, 8)
 
   await Admins.findByIdAndUpdate(adminId, {
     firstName: firstName,
     lastName: lastName,
     email: email,
-    password: password,
+    password: hashedPassword,
   });
 
   const admin = await Admins.findById(adminId);
@@ -93,9 +90,7 @@ const updateAdmin = async (req, res) => {
 
 const deleteAdmin = async (req, res) => {
   const adminId = req.params.id;
-
   await Admins.findByIdAndDelete(adminId);
-
   res.json({ success: "record deleted" });
 };
 

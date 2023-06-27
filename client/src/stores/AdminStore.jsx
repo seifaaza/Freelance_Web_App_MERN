@@ -6,7 +6,16 @@ const adminStore = create((set) => ({
 
   admins: null,
 
+  admin: null,
+
   createForm: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  },
+
+  updateForm: {
     firstName: "",
     lastName: "",
     email: "",
@@ -28,7 +37,7 @@ const adminStore = create((set) => ({
   addAdmin: async (e) => {
     e.preventDefault();
     const { createForm, admins } = adminStore.getState();
-    const res = await axios.post("/admins", createForm);
+    const res = await axios.post("/admin", createForm);
     set({
       admins: [...admins, res.data.admins],
       createForm: {
@@ -51,6 +60,70 @@ const adminStore = create((set) => ({
         },
       };
     });
+  },
+
+  handleUpdateFieldChange: (e) => {
+    const { value, name } = e.target;
+    set((state) => {
+      return {
+        updateForm: {
+          ...state.updateForm,
+          [name]: value,
+        },
+      };
+    });
+  },
+
+  toggleUpdate: ({ _id, firstName, lastName, email, password }) => {
+    set({
+      updateForm: {
+        _id,
+        firstName,
+        lastName,
+        email,
+        password,
+      },
+      modalOpen: true,
+    });
+  },
+
+  toggleDelete: () => {
+    set({
+      modalOpen: true,
+    });
+  },
+
+  updateAdmin: async (e) => {
+    e.preventDefault();
+    const {
+      updateForm: { _id, firstName, lastName, email, password },
+    } = adminStore.getState();
+    console.log(email);
+    console.log(password);
+    const res = await axios.put(`/admin/${_id}`, {
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+    set({
+      updateForm: {
+        _id: null,
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      },
+      modalOpen: false,
+    });
+  },
+
+  deleteAdmin: async (_id) => {
+    await axios.delete(`/admin/${_id}`);
+    set({
+      modalOpen: false,
+    });
+    window.location.replace("/dashboard");
   },
 }));
 
