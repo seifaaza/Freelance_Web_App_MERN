@@ -5,7 +5,6 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const uploadMiddleware = require('./middleware/MulterMiddleware')
-const Team = require('./models/team')
 
 //Authentication
 const requireAuth = require('./middleware/requireAuth')
@@ -52,13 +51,16 @@ app.post("/admin",  adminController.createAdmin);
 app.put("/admin/:id",  adminController.updateAdmin);
 app.delete("/admin/:id",  adminController.deleteAdmin);
 
+app.use('/user', express.static('uploads'))
 // Users
+app.get("/users", userController.fetchUsers);
+app.get("/user/:id", userController.fetchUser);
 app.post("/signup", userController.signup);
+app.put("/update-user/:id", uploadMiddleware.single("image"), userController.updateUser);
 app.post("/login", userController.login);
 app.get("/check-auth",requireAuth, userController.checkAuth);
 app.get("/logout", userController.logout);
-app.get("/users", userController.fetchUsers);
-app.delete("/users/:id", userController.deleteUser);
+app.delete("/user/:id", userController.deleteUser);
 
 app.use('/team', express.static('uploads'))
 // Team

@@ -2,6 +2,7 @@ import create from "zustand";
 import axios from "axios";
 
 const authStore = create((set) => ({
+  modalOpen: false,
   loggedIn: null,
 
   loginError: false,
@@ -17,6 +18,8 @@ const authStore = create((set) => ({
     email: "",
     password: "",
   },
+
+  userId: null,
 
   updateLoginForm: (e) => {
     const { name, value } = e.target;
@@ -85,6 +88,7 @@ const authStore = create((set) => ({
           email: "",
           password: "",
         },
+        modalOpen: true,
       });
     } catch (err) {
       if (
@@ -105,8 +109,8 @@ const authStore = create((set) => ({
 
   checkAuth: async () => {
     try {
-      await axios("/check-auth", { withCredentials: true });
-      set({ loggedIn: true });
+      const res = await axios("/check-auth", { withCredentials: true });
+      set({ loggedIn: true, user: res.data.user, userId: res.data.user._id });
     } catch (err) {
       set({ loggedIn: false });
     }
@@ -115,6 +119,7 @@ const authStore = create((set) => ({
   logout: async () => {
     await axios.get("/logout", { withCredentials: true });
     set({ loggedIn: false });
+    window.location.replace("/started");
   },
 }));
 

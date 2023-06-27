@@ -90,7 +90,39 @@ export default function MenuItems({ items }) {
             </button>
             <Dropdown submenus={items.submenu} dropdown={dropdown} />
           </>
-        ) : !items.url && items.path === "signUp" ? (
+        ) : items.url && items.url === "/community" ? (
+          <NavLink
+            className={` py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+          >
+            <span> {items.title} </span>
+          </NavLink>
+        ) : store.loggedIn && items.url && items.path === "my-bag" ? (
+          <NavLink
+            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+          >
+            <ShoppingBagIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : store.loggedIn && items.url && items.path === "saved" ? (
+          <NavLink
+            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+          >
+            <BookmarkIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : store.loggedIn && !items.url && items.path === "logout" ? (
+          <NavLink
+            className={`text-red-600 laptop:hover:text-red-500 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
+            to={items.url}
+            onClick={store.logout}
+          >
+            <LogoutIcon />
+            <span> {items.title} </span>
+          </NavLink>
+        ) : !store.loggedIn && !items.url && items.path === "signUp" ? (
           <NavLink
             className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
             to={items.url}
@@ -102,7 +134,7 @@ export default function MenuItems({ items }) {
             <PersonAddIcon />
             <span> {items.title} </span>
           </NavLink>
-        ) : !items.url && items.path === "login" ? (
+        ) : !store.loggedIn && !items.url && items.path === "login" ? (
           <NavLink
             className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
             to={items.url}
@@ -114,39 +146,11 @@ export default function MenuItems({ items }) {
             <LoginIcon />
             <span> {items.title} </span>
           </NavLink>
-        ) : items.url && items.path === "my-bag" ? (
-          <NavLink
-            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
-            to={items.url}
-          >
-            <ShoppingBagIcon />
-            <span> {items.title} </span>
-          </NavLink>
-        ) : items.url && items.path === "saved" ? (
-          <NavLink
-            className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
-            to={items.url}
-          >
-            <BookmarkIcon />
-            <span> {items.title} </span>
-          </NavLink>
-        ) : !items.url && items.path === "logout" ? (
-          <NavLink
-            className={`text-red-600 laptop:hover:text-red-500 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
-            to={items.url}
-            onClick={store.logout}
-          >
-            <LogoutIcon />
-            <span> {items.title} </span>
-          </NavLink>
-        ) : items.url && items.url === "/community" ? (
-          <NavLink
-            className={` py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
-            to={items.url}
-          >
-            <span> {items.title} </span>
-          </NavLink>
-        ) : (
+        ) : items.path === "my-bag" ||
+          items.path === "signUp" ||
+          items.path === "login" ||
+          items.path === "saved" ||
+          items.path === "logout" ? null : (
           <NavLink
             className={`laptop:hover:text-violet-600 py-2 w-fit px-2 rounded-md flex gap-3 items-center `}
             to={items.url}

@@ -71,6 +71,7 @@ const adminAuthStore = create((set) => ({
   logout: async () => {
     await axios.get("/admin-logout", { withCredentials: true });
     set({ loggedIn: false });
+    window.location.replace("/dashboard/");
   },
 }));
 

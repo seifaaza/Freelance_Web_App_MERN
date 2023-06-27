@@ -7,6 +7,12 @@ const fetchUsers = async (req, res) => {
   res.json({ users: users });
 };
 
+const fetchUser = async (req, res) => {
+  const userId = req.params.id;
+  const user = await Users.findById(userId);
+  res.json({ user: user });
+};
+
 async function signup(req, res) {
   try{
     const {fullName, email, password} = req.body;
@@ -34,8 +40,8 @@ async function login(req, res) {
   try {
     const {email, password} = req.body;
     const user = await Users.findOne({email});
+
   if(!user) return res.sendStatus(401);
-  
   const passwordMatch = bcrypt.compareSync(password, user.password);
   if(!passwordMatch) return res.sendStatus(401)
   
@@ -48,7 +54,6 @@ async function login(req, res) {
     sameSite : "lax",
     secure : process.env.NODE_ENV === 'production',
   })
-  
   res.sendStatus(200)
 }
 catch(err){
@@ -75,6 +80,28 @@ function logout(req, res) {
   }
 }
 
+const updateUser = async (req, res) => {
+  userId = req.params.id;
+
+  const {fullName, email,  job, des , password, availability} = req.body;
+  const image = req.file.filename ;
+  const hashedPassword = bcrypt.hashSync(password, 8)
+
+  await Users.findByIdAndUpdate(userId, {
+    fullName :fullName,
+    email : email,
+    image: image,
+    job : job,
+    des : des,
+    availability : availability,
+    password: hashedPassword,
+  });
+
+  const user = await Users.findById(userId);
+
+  res.json({ user: user });
+};
+
 
 const deleteUser = async (req, res) => {
   const userId = req.params.id;
@@ -87,7 +114,9 @@ const deleteUser = async (req, res) => {
 module.exports = {
   deleteUser: deleteUser,
   fetchUsers: fetchUsers,
+  fetchUser: fetchUser,
   signup: signup,
+  updateUser: updateUser,
   checkAuth: checkAuth,
   login: login,
   logout: logout,

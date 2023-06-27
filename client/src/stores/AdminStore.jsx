@@ -5,7 +5,6 @@ const adminStore = create((set) => ({
   modalOpen: false,
 
   admins: null,
-
   admin: null,
 
   createForm: {

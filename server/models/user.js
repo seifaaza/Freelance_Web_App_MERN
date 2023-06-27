@@ -13,7 +13,10 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  image: String,
+  image: { type: String, default: "avatar" },
+  job: String,
+  availability: { type: Boolean, default: true },
+  des: String
 });
 
 const Users = mongoose.model("Users", usersSchema);

@@ -14,7 +14,7 @@ async function requireAuth(req, res, next) {
 
         req.user = user
 
-        next();
+        res.json({user : user})
 
     }catch(err){
         return res.sendStatus(401)

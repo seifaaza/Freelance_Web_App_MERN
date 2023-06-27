@@ -2,8 +2,35 @@ import create from "zustand";
 import axios from "axios";
 
 const userStore = create((set) => ({
-  users: null,
   modalOpen: false,
+
+  users: null,
+  user: null,
+
+  createForm: {
+    fullName: "",
+    email: "",
+    password: "",
+    image: "",
+    des: "",
+    job: "",
+  },
+
+  updateForm: {
+    fullName: "",
+    email: "",
+    password: "",
+    image: "",
+    des: "",
+    job: "",
+  },
+
+  handleOpen: () => {
+    set({ modalOpen: true });
+  },
+  handleClose: () => {
+    set({ modalOpen: false });
+  },
 
   fetchUsers: async () => {
     const res = await axios.get("/users");
@@ -34,38 +61,49 @@ const userStore = create((set) => ({
     });
   },
 
-  updateTeam: async (e) => {
-    e.preventDefault();
+  toggleUpdate: ({ _id, fullName, image, email, password, des, job }) => {
+    set({
+      updateForm: {
+        _id,
+        fullName,
+        email,
+        password,
+        image,
+        des,
+        job,
+      },
+      modalOpen: true,
+    });
+  },
+
+  updateUser: async () => {
     const {
-      updateForm: { _id, fullName, email, password, image },
-      users,
+      updateForm: { _id, fullName, email, password, image, job, des },
     } = userStore.getState();
-    const res = await axios.put(`/user/${_id}`, {
+    const res = await axios.put(`/update-user/${_id}`, {
       fullName,
       email,
       password,
       image,
+      job,
+      des,
     });
-    const newUser = [...users];
-    const userIndex = users.findIndex((users) => {
-      return users._id === _id;
-    });
-    newUser[userIndex] = res.data.users;
     set({
-      users: newUser,
+      modalOpen: false,
       updateForm: {
         _id: null,
         fullName: "",
         email: "",
         password: "",
         image: "",
+        job: "",
+        des: "",
       },
-      modalOpen: false,
     });
   },
 
   deleteUser: async (_id) => {
-    const res = await axios.delete(`/users/${_id}`);
+    const res = await axios.delete(`/user/${_id}`);
     const { users } = userStore.getState();
     const newUser = [...users].filter((users) => {
       return users._id !== _id;

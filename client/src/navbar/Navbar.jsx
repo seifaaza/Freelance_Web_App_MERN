@@ -5,8 +5,11 @@ import MenuItems from "./MenuItems";
 import SwitchMode from "./SwitchMode";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
+import authStore from "../stores/AuthStore";
 
 export default function Navbar() {
+  const loggedStore = authStore();
+
   const [navOpen, setNavOpen] = useState(false);
 
   function NavClose(NavEvent) {
@@ -42,24 +45,32 @@ export default function Navbar() {
       <div className="main-container flex flex-col flex-wrap laptop:items-center laptop:flex-row justify-between py-2 laptop:py-0">
         <div className="flex justify-between">
           <Link
-            //  to="/"
-            to="/profile"
+            to={loggedStore.loggedIn ? "/profile" : "/"}
             onClick={ScrollToTop}
           >
-            <img
-              src="/assets/svg/logo/logo.svg"
-              alt=""
-              className="h-10 selection:bg-transparent"
-              onClick={() => {
-                setNavOpen(false);
-                document.body.classList.remove("fixed");
-              }}
-            />
-            {/* <Avatar
-              alt="seif"
-              src="/assets/images/mohamed.jpg"
-              className="border-2 "
-            ></Avatar> */}
+            {loggedStore.loggedIn ? (
+              <Avatar
+                alt={`${loggedStore.user && loggedStore.user.fullName} photo`}
+                src={
+                  loggedStore.user && loggedStore.user.image == "avatar"
+                    ? `/assets/images/default-avatar.svg`
+                    : `http://localhost:3000/uploads/${
+                        loggedStore.user && loggedStore.user.image
+                      }`
+                }
+                className="border-2"
+              />
+            ) : (
+              <img
+                src="/assets/svg/logo/logo.svg"
+                alt=""
+                className="h-10 selection:bg-transparent"
+                onClick={() => {
+                  setNavOpen(false);
+                  document.body.classList.remove("fixed");
+                }}
+              />
+            )}
           </Link>
           <div
             className={`cursor-pointer nav-icon ${

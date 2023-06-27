@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
@@ -6,13 +6,28 @@ import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { Link } from "react-router-dom";
 import DeleteModal from "../../modals/DeleteModal";
+import Complet from "../../modals/Complet";
+import userAuthStore from "../../stores/AuthStore";
+import userStore from "../../stores/UserStore";
 
 export default function Profile() {
+  const [deleteToggle, setDeleteToggle] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [completModalOpen, setCompletModalOpen] = useState(true);
+  const loggedStore = userAuthStore();
+  const store = userStore();
+
+  useEffect(() => {
+    loggedStore.checkAuth();
+  }, []);
 
   const handleClose = () => {
     setModalOpen(false);
+  };
+  const completModalClose = () => {
+    setCompletModalOpen(false);
   };
 
   const ModalOpen = (SignEvent) => {
@@ -26,45 +41,63 @@ export default function Profile() {
           <div className="flex flex-col gap-8">
             <div className="flex gap-8 h-fit text-slate-700 w-full text-center laptop:text-start ">
               <Avatar
-                sx={{
-                  height: "120px",
-                  width: "120px",
-                  fontSize: "80px",
-                }}
-                alt="seif"
-                src="/assets/images/mohamed.jpg"
-              ></Avatar>
+                alt={`${loggedStore.user && loggedStore.user.fullName} photo`}
+                src={
+                  loggedStore.user && loggedStore.user.image == "avatar"
+                    ? `/assets/images/default-avatar.svg`
+                    : `http://localhost:3000/uploads/${
+                        loggedStore.user && loggedStore.user.image
+                      }`
+                }
+                sx={{ width: 150, height: 150 }}
+              />
+
               <div className="self-center flex flex-col gap-2">
-                <h1 className="text-3xl dark:text-white ">Seifeddine AAZA</h1>
+                <h1 className="text-3xl dark:text-white ">
+                  {loggedStore.user && loggedStore.user.fullName}
+                </h1>
                 <p className="text-small max-w-xl laptop:max-w-md dark:text-slate-300">
-                  Web developer
+                  {loggedStore.user && loggedStore.user.job}
                 </p>
                 <Rating name="read-only" value={3} readOnly />
               </div>
             </div>
           </div>
           <div className="flex gap-2">
-            <Chip
-              label="Available now"
-              color="success"
-              variant="contained"
-              className="font-main "
-            />
-            {/* <Chip
-              label="Unavailable now"
-              color="error"
-              variant="contained"
-              className="font-main "
-            /> */}
+            {loggedStore.user && loggedStore.user.availability ? (
+              <Chip
+                label="Available now"
+                color="success"
+                variant="contained"
+                className="font-main "
+              />
+            ) : (
+              <Chip
+                label="Unavailable now"
+                color="error"
+                variant="contained"
+                className="font-main "
+              />
+            )}
           </div>
         </div>
         <div className="flex justify-between w-full gap-6">
-          <p className="text-small max-w-xl laptop:max-w-md dark:text-slate-300">
-            Hello World Community were created to give people a dedicated place
-            to connect, share, and get closer to the discussions they care about
-            most.
-          </p>
-          <div className="flex flex-wrap gap-2 max-w-md font-main dark:text-slate-300">
+          <div className="flex flex-col gap-3">
+            <Link
+              onClick={() => {
+                window.location.href = `mailto:${
+                  loggedStore.user && loggedStore.user.email
+                }`;
+              }}
+              className="text-small max-w-xl laptop:max-w-md dark:text-slate-300 hover:underline"
+            >
+              {loggedStore.user && loggedStore.user.email}
+            </Link>
+            <p className="text-small max-w-xl laptop:max-w-md text-slate-600 dark:text-slate-300">
+              {loggedStore.user && loggedStore.user.des}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 max-w-md self-start font-main dark:text-slate-300">
             <Chip
               label="React js"
               variant="outlined"
@@ -113,14 +146,16 @@ export default function Profile() {
           size="medium"
           endIcon={<DeleteIcon />}
           className="btn btn-contained-danger "
-          onClick={() => setModalOpen(true)}
+          onClick={() => {
+            setModalOpen(true), setDeleteToggle(true);
+          }}
         >
           Delete my account
         </Button>
       </div>
       <Modal
-        open={modalOpen}
-        onClose={handleClose}
+        open={loggedStore.modalOpen}
+        onClose={store.handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -128,7 +163,11 @@ export default function Profile() {
           sx={{ bgcolor: "white" }}
           className="p-4 tablet:p-6 laptop:p-8 desktop:p-10 desktop:px-16 absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 dark:bg-slate-900 bg-opacity-50 backdrop-blur-lg rounded-lg"
         >
-          <DeleteModal ModalOpen={ModalOpen} />
+          {deleteToggle ? (
+            <DeleteModal ModalOpen={ModalOpen} />
+          ) : (
+            <Complet ModalOpen={ModalOpen} />
+          )}
         </Box>
       </Modal>
     </div>
