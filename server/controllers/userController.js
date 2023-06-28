@@ -82,27 +82,18 @@ function logout(req, res) {
 }
 
 const updateUser = async (req, res) => {
-
-  userId = req.params.id;
-
-  const {fullName, email,  job, des , password, availability} = req.body;
-   const image = !req.file ? "avatar"  : req.file.filename ;
-  // const hashedPassword = bcrypt.hashSync(password, 8)
-
-  const user = await Users.findByIdAndUpdate(userId, {
-    fullName :fullName,
-    email : email,
-    image: image,
-    job : job,
-    des : des,
-    availability : availability,
-    // password: hashedPassword,
-    password: password,
-  });
-
-   await Users.findById(userId);
-
-  res.json({ user: user });
+  try {
+    userId = req.params.id;
+    const {fullName, email,  job, des , password, availability} = req.body;
+    const image = !req.file ? "avatar"  : req.file.filename ;
+    // const hashedPassword = bcrypt.hashSync(password, 8)
+    await Users.findByIdAndUpdate(userId, { fullName, email, image, job, des, availability, password});
+    const user = await Users.findById(userId);
+    res.json({ user: user });
+  }catch(err) {
+    console.log("Updating user failed");
+    console.log(err);
+  }
 };
 
 

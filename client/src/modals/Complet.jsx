@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -16,6 +16,14 @@ export default function Complet({ DeleteAdmin, Cancel }) {
   const loggedStore = userAuthStore();
   const store = userStore();
 
+  useEffect(() => {
+    loggedStore.checkAuth();
+  }, []);
+
+  // useEffect(() => {
+  //   store.toggleUpdate(loggedStore.user);
+  // }, []);
+
   return (
     <form
       onSubmit={store.updateUser}
@@ -23,9 +31,7 @@ export default function Complet({ DeleteAdmin, Cancel }) {
       className="flex flex-col gap-5 w-full text-slate-700 dark:text-slate-400 laptop:max-w-sm"
     >
       <div className="text-small-heading text-center mb-6">
-        <p className="text-violet-600 text-medium">
-          Hello {loggedStore.user && loggedStore.user.fullName}
-        </p>
+        <p className="text-violet-600 text-medium">Hello</p>
         please complet your profile informations
       </div>
       <FormControl variant="outlined" className="input-image">
@@ -63,9 +69,7 @@ export default function Complet({ DeleteAdmin, Cancel }) {
         id="outlined-textarea"
         label="Job"
         placeholder="Your job"
-        // value={store.updateForm.job}
         onChange={store.handleUpdateFieldChange}
-        onClick={() => store.toggleUpdate(loggedStore.user)}
       />{" "}
       <TextField
         type="text"
@@ -76,7 +80,6 @@ export default function Complet({ DeleteAdmin, Cancel }) {
         placeholder="Describe your profile"
         multiline
         rows={4}
-        // value={store.updateForm.des}
         onChange={store.handleUpdateFieldChange}
       />{" "}
       <div className="flex justify-center gap-4">

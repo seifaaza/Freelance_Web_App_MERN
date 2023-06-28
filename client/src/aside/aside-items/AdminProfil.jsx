@@ -37,7 +37,7 @@ export default function AdminProfil() {
   };
 
   useEffect(() => {
-    loggedStore.checkAuth();
+    loggedStore.login();
   }, []);
 
   const deleteModalAction = () => {

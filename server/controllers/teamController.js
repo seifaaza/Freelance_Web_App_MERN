@@ -33,9 +33,6 @@ const updateTeam = async (req, res) => {
   } catch(err) {
     console.log(err);
   }
-
-
-
 };
 
 const deleteTeam = async (req, res) => {

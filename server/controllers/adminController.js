@@ -80,9 +80,7 @@ function logout(req, res) {
 
 const updateAdmin = async (req, res) => {
   try{
-
     adminId = req.params.id;
-    
     const {firstName, lastName, email, password} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8)
     

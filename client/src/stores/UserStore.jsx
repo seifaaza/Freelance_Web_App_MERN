@@ -20,6 +20,7 @@ const userStore = create((set) => ({
   },
 
   updateForm: {
+    _id: null,
     fullName: "",
     email: "",
     password: "",
@@ -92,46 +93,29 @@ const userStore = create((set) => ({
     });
   },
 
-  // updateUser: async () => {
-  //   const {
-  //     updateForm: { _id, fullName, email, password, image, job, des },
-  //   } = userStore.getState();
-  //   const res = await axios.put(`/update-user/${_id}`, {
-  //     fullName,
-  //     email,
-  //     password,
-  //     image,
-  //     job,
-  //     des,
-  //   });
-  //   set({
-  //     modalOpen: false,
-  //     updateForm: {
-  //       _id: null,
-  //       fullName: "",
-  //       email: "",
-  //       password: "",
-  //       image: "",
-  //       job: "",
-  //       des: "",
-  //     },
-  //   });
-  // },
-
-  updateUser: async () => {
+  updateUser: async (e) => {
+    e.preventDefault();
     const {
       updateForm: { _id, fullName, email, password, image, job, des },
       updateImage,
     } = userStore.getState();
     const formdata = new FormData();
-    formdata.append("email", email);
     formdata.append("fullName", fullName);
+    formdata.append("email", email);
     formdata.append("password", password);
     formdata.append("image", updateImage);
     formdata.append("job", job);
     formdata.append("des", des);
     const res = await axios.put(`/update-user/${_id}`, formdata);
     set({
+      createForm: {
+        fullName: "",
+        email: "",
+        password: "",
+        image: "",
+        job: "",
+        des: "",
+      },
       modalOpen: false,
       updateForm: {
         _id: null,
@@ -142,8 +126,44 @@ const userStore = create((set) => ({
         job: "",
         des: "",
       },
+      updateImage: "",
     });
   },
+
+  // updateUser: async (e) => {
+  //   e.preventDefault();
+  //   const {
+  //     updateForm: { _id, fullName, email, image, password, des, job },
+  //     user,
+  //     updateImage,
+  //   } = userStore.getState();
+  //   const formdata = new FormData();
+  //   formdata.append("fullName", fullName);
+  //   formdata.append("email", email);
+  //   formdata.append("password", password);
+  //   formdata.append("updateImage", updateImage);
+  //   formdata.append("des", des);
+  //   formdata.append("job", job);
+  //   const res = await axios.put(`/update-user/${_id}`, formdata);
+  //   const newUser = [...user];
+  //   const userIndex = user.findIndex((user) => {
+  //     return user._id === _id;
+  //   });
+  //   newUser[userIndex] = res.data.user;
+  //   set({
+  //     user: newUser,
+  //     updateForm: {
+  //       _id: null,
+  //       fullName: "",
+  //       image: "",
+  //       email: "",
+  //       password: "",
+  //       job: "",
+  //       des: "",
+  //     },
+  //     modalOpen: false,
+  //   });
+  // },
 
   deleteUser: async (_id) => {
     const res = await axios.delete(`/user/${_id}`);

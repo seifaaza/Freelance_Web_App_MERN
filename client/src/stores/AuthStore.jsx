@@ -21,6 +21,10 @@ const authStore = create((set) => ({
 
   userId: null,
 
+  handleClose: () => {
+    set({ modalOpen: false });
+  },
+
   updateLoginForm: (e) => {
     const { name, value } = e.target;
     set((state) => {
@@ -57,6 +61,7 @@ const authStore = create((set) => ({
           email: "",
           password: "",
         },
+        modalOpen: true,
       });
     } catch (err) {
       if (
@@ -118,8 +123,8 @@ const authStore = create((set) => ({
 
   logout: async () => {
     await axios.get("/logout", { withCredentials: true });
-    set({ loggedIn: false });
     window.location.replace("/started");
+    set({ loggedIn: false });
   },
 }));
 
