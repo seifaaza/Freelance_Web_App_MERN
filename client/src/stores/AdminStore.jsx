@@ -36,6 +36,7 @@ const adminStore = create((set) => ({
   addAdmin: async (e) => {
     e.preventDefault();
     const { createForm, admins } = adminStore.getState();
+
     const res = await axios.post("/admin", createForm);
     set({
       admins: [...admins, res.data.admins],

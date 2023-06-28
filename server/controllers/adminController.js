@@ -3,14 +3,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const fetchAdmins = async (req, res) => {
-  const admins = await Admins.find();
-  res.json({ admins: admins });
+  try{
+    const admins = await Admins.find();
+    res.json({ admins: admins });
+  }catch(err){
+    console.log("fetching admins failed");
+  }
 };
 
 const fetchAdmin = async (req, res) => {
-  const adminID = req.params.id;
-  const admin = await Admins.findById(adminID);
-  res.json({ admin: admin });
+  try{
+    const adminID = req.params.id;
+    const admin = await Admins.findById(adminID);
+    res.json({ admin: admin });
+  }catch(err) {
+    console.log("fetching admin failed");
+  }
 };
 
 const createAdmin = async (req, res) => {
@@ -71,27 +79,37 @@ function logout(req, res) {
 }
 
 const updateAdmin = async (req, res) => {
-  adminId = req.params.id;
+  try{
 
-  const {firstName, lastName, email, password} = req.body;
-  const hashedPassword = bcrypt.hashSync(password, 8)
-
-  await Admins.findByIdAndUpdate(adminId, {
+    adminId = req.params.id;
+    
+    const {firstName, lastName, email, password} = req.body;
+    const hashedPassword = bcrypt.hashSync(password, 8)
+    
+    await Admins.findByIdAndUpdate(adminId, {
     firstName: firstName,
     lastName: lastName,
     email: email,
     password: hashedPassword,
   });
-
+  
   const admin = await Admins.findById(adminId);
-
+  
   res.json({ admin: admin });
+}catch(err){
+  console.log("Updating admin failed");
+}
 };
 
 const deleteAdmin = async (req, res) => {
-  const adminId = req.params.id;
-  await Admins.findByIdAndDelete(adminId);
-  res.json({ success: "record deleted" });
+  try{
+
+    const adminId = req.params.id;
+    await Admins.findByIdAndDelete(adminId);
+    res.json({ success: "record deleted" });
+  }catch(err) {
+    console.log("Deleting admin failed");
+  }
 };
 
 module.exports = {

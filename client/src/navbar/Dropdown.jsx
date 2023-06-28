@@ -8,7 +8,7 @@ const Dropdown = ({ submenus, dropdown }) => {
       } `}
     >
       {submenus.map((submenu, index) => (
-        <MenuItems items={submenu} key={index}/>
+        <MenuItems items={submenu} key={index} />
       ))}
     </ul>
   );

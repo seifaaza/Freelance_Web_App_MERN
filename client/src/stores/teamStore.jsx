@@ -42,44 +42,45 @@ const teamStore = create((set) => ({
     set({ team: res.data.team });
   },
 
-  addTeam: async () => {
-    try {
-      const { createForm, team, image } = teamStore.getState();
-      const formdata = new FormData();
-      formdata.append("email", createForm.email);
-      formdata.append("fullName", createForm.fullName);
-      formdata.append("linkedin", createForm.linkedin);
-      formdata.append("figma", createForm.figma);
-      formdata.append("github", createForm.github);
-      formdata.append("image", image);
-      const res = await axios.post("/team", formdata);
-      set({
-        team: [...team, res.data.team],
-        createForm: {
-          fullName: "",
-          email: "",
-          image: "",
-          linkedin: "",
-          github: "",
-          figma: "",
-        },
-        modalOpen: false,
-      });
-    } catch (err) {
-      if (
-        err.response &&
-        err.response.status >= 400 &&
-        err.response.status < 500
-      )
-        set({
-          emailError: true,
-        });
-      else {
-        set({
-          emailError: false,
-        });
-      }
-    }
+  addTeam: async (e) => {
+    // try {
+    e.preventDefault();
+    const { createForm, team, image } = teamStore.getState();
+    const formdata = new FormData();
+    formdata.append("email", createForm.email);
+    formdata.append("fullName", createForm.fullName);
+    formdata.append("linkedin", createForm.linkedin);
+    formdata.append("figma", createForm.figma);
+    formdata.append("github", createForm.github);
+    formdata.append("image", image);
+    const res = await axios.post("/team", formdata);
+    set({
+      team: [...team, res.data.team],
+      createForm: {
+        fullName: "",
+        email: "",
+        image: "",
+        linkedin: "",
+        github: "",
+        figma: "",
+      },
+      modalOpen: false,
+    });
+    // } catch (err) {
+    //   if (
+    //     err.response &&
+    //     err.response.status >= 400 &&
+    //     err.response.status < 500
+    //   )
+    //     set({
+    //       emailError: true,
+    //     });
+    //   else {
+    //     set({
+    //       emailError: false,
+    //     });
+    //   }
+    // }
   },
 
   handleImage: (e) => {

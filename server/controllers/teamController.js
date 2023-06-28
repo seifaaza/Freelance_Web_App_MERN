@@ -2,21 +2,23 @@ const Team = require("../models/team");
 const path = require("path");
 
 const fetchTeam = async (req, res) => {
-  const team = await Team.find();
-  res.json({ team: team });
+  try{
+    const team = await Team.find();
+    res.json({ team: team });
+  }catch(err) {
+    console.log("Fetching team failed");
+  }
 };
 
 const createTeam = async (req, res) => {
   try {
   const image = !req.file ? "avatar"  : req.file.filename ;
   const {fullName, email, linkedin, github, figma} = req.body;
-  Team.create({fullName, email, image, linkedin, github, figma })
-    .then((data) => {
-      console.log(data);
-      res.send(data);
-    })
+  const team = await Team.create({fullName, email, image, linkedin, github, figma })
+  res.json({ team: team })
   }catch(err){
     console.log(err)
+    res.sendStatus(400)
   }
 }
 
@@ -37,11 +39,13 @@ const updateTeam = async (req, res) => {
 };
 
 const deleteTeam = async (req, res) => {
-  const teamId = req.params.id;
-
-  await Team.findByIdAndDelete(teamId);
-
-  res.json({ success: "record deleted" });
+  try{
+    const teamId = req.params.id;
+    await Team.findByIdAndDelete(teamId);
+    res.json({ success: "record deleted" });
+  }catch(err) {
+    console.log("Deleting record failed");
+  }
 };
 
 module.exports = {

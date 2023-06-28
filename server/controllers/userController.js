@@ -1,6 +1,7 @@
 const Users = require("../models/user");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require("path");
 
 const fetchUsers = async (req, res) => {
   const users = await Users.find();
@@ -81,23 +82,25 @@ function logout(req, res) {
 }
 
 const updateUser = async (req, res) => {
+
   userId = req.params.id;
 
   const {fullName, email,  job, des , password, availability} = req.body;
-  const image = req.file.filename ;
-  const hashedPassword = bcrypt.hashSync(password, 8)
+   const image = !req.file ? "avatar"  : req.file.filename ;
+  // const hashedPassword = bcrypt.hashSync(password, 8)
 
-  await Users.findByIdAndUpdate(userId, {
+  const user = await Users.findByIdAndUpdate(userId, {
     fullName :fullName,
     email : email,
     image: image,
     job : job,
     des : des,
     availability : availability,
-    password: hashedPassword,
+    // password: hashedPassword,
+    password: password,
   });
 
-  const user = await Users.findById(userId);
+   await Users.findById(userId);
 
   res.json({ user: user });
 };
