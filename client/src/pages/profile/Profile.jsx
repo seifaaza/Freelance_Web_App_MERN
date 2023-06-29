@@ -4,6 +4,7 @@ import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Link } from "react-router-dom";
@@ -20,7 +21,7 @@ export default function Profile() {
   const store = userStore();
 
   useEffect(() => {
-    loggedStore.checkAuth();
+    store.fetchUser();
   }, []);
 
   const handleClose = () => {
@@ -41,12 +42,12 @@ export default function Profile() {
           <div className="flex flex-col gap-8">
             <div className="flex gap-8 h-fit text-slate-700 w-full text-center laptop:text-start ">
               <Avatar
-                alt={`${loggedStore.user && loggedStore.user.fullName} photo`}
+                alt={`${store.user && store.user.fullName} photo`}
                 src={
-                  loggedStore.user && loggedStore.user.image == "avatar"
+                  store.user && store.user.image == "avatar"
                     ? `/assets/images/default-avatar.svg`
                     : `http://localhost:3000/uploads/${
-                        loggedStore.user && loggedStore.user.image
+                        store.user && store.user.image
                       }`
                 }
                 sx={{ width: 150, height: 150 }}
@@ -54,17 +55,17 @@ export default function Profile() {
 
               <div className="self-center flex flex-col gap-2">
                 <h1 className="text-3xl dark:text-white ">
-                  {loggedStore.user && loggedStore.user.fullName}
+                  {store.user && store.user.fullName}
                 </h1>
                 <p className="text-small max-w-xl laptop:max-w-md dark:text-slate-300">
-                  {loggedStore.user && loggedStore.user.job}
+                  {store.user && store.user.job}
                 </p>
                 <Rating name="read-only" value={3} readOnly />
               </div>
             </div>
           </div>
           <div className="flex gap-2">
-            {loggedStore.user && loggedStore.user.availability ? (
+            {store.user && store.user.availability ? (
               <Chip
                 label="Available now"
                 color="success"
@@ -86,15 +87,15 @@ export default function Profile() {
             <Link
               onClick={() => {
                 window.location.href = `mailto:${
-                  loggedStore.user && loggedStore.user.email
+                  store.user && store.user.email
                 }`;
               }}
               className="text-small max-w-xl laptop:max-w-md dark:text-slate-300 hover:underline"
             >
-              {loggedStore.user && loggedStore.user.email}
+              {store.user && store.user.email}
             </Link>
             <p className="text-small max-w-xl laptop:max-w-md text-slate-600 dark:text-slate-300">
-              {loggedStore.user && loggedStore.user.des}
+              {store.user && store.user.des}
             </p>
           </div>
           <div className="flex flex-wrap gap-2 max-w-md self-start font-main dark:text-slate-300">
@@ -140,21 +141,33 @@ export default function Profile() {
           button to delete your account there is no option to restore the
           account !
         </p>
-
-        <Button
-          variant="contained"
-          size="medium"
-          endIcon={<DeleteIcon />}
-          className="btn btn-contained-danger "
-          onClick={() => {
-            setModalOpen(true), setDeleteToggle(true);
-          }}
-        >
-          Delete my account
-        </Button>
+        <div className="flex flex-col gap-2 items-center">
+          <Button
+            variant="contained"
+            size="medium"
+            endIcon={<EditIcon />}
+            className="btn btn-contained "
+            onClick={() => {
+              // setOpenComplet(true);
+              store.closeDelete(false);
+              store.toggleUpdate(store.user);
+            }}
+          >
+            Edit Profile
+          </Button>
+          <Button
+            variant="contained"
+            size="medium"
+            endIcon={<DeleteIcon />}
+            className="btn btn-contained-danger "
+            onClick={store.openDelete}
+          >
+            Delete my account
+          </Button>
+        </div>
       </div>
       <Modal
-        open={loggedStore.modalOpen}
+        open={store.modalOpen}
         onClose={store.handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -163,7 +176,7 @@ export default function Profile() {
           sx={{ bgcolor: "white" }}
           className="p-4 tablet:p-6 laptop:p-8 desktop:p-10 desktop:px-16 absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 dark:bg-slate-900 bg-opacity-50 backdrop-blur-lg rounded-lg"
         >
-          {deleteToggle ? (
+          {store.deleteToggle ? (
             <DeleteModal ModalOpen={ModalOpen} />
           ) : (
             <Complet ModalOpen={ModalOpen} />

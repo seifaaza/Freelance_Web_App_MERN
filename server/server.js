@@ -61,6 +61,7 @@ app.post("/login", userController.login);
 app.get("/check-auth",requireAuth, userController.checkAuth);
 app.get("/logout", userController.logout);
 app.delete("/user/:id", userController.deleteUser);
+app.delete("/user-account/:id", userController.deleteAcc);
 
 app.use('/team', express.static('uploads'))
 // Team

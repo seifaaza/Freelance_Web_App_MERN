@@ -6,9 +6,11 @@ import SwitchMode from "./SwitchMode";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import authStore from "../stores/AuthStore";
+import userStore from "../stores/UserStore";
 
 export default function Navbar() {
   const loggedStore = authStore();
+  const store = userStore();
 
   const [navOpen, setNavOpen] = useState(false);
 
@@ -50,12 +52,12 @@ export default function Navbar() {
           >
             {loggedStore.loggedIn ? (
               <Avatar
-                alt={`${loggedStore.user && loggedStore.user.fullName} photo`}
+                alt={`${store.user && store.user.fullName} photo`}
                 src={
-                  loggedStore.user && loggedStore.user.image == "avatar"
+                  store.user && store.user.image == "avatar"
                     ? `/assets/images/default-avatar.svg`
                     : `http://localhost:3000/uploads/${
-                        loggedStore.user && loggedStore.user.image
+                        store.user && store.user.image
                       }`
                 }
                 className="border-2"

@@ -3,6 +3,7 @@ import axios from "axios";
 
 const userStore = create((set) => ({
   modalOpen: false,
+  deleteToggle: false,
 
   users: null,
   user: null,
@@ -29,6 +30,14 @@ const userStore = create((set) => ({
     job: "",
   },
 
+  openDelete: () => {
+    set({ modalOpen: true, deleteToggle: true });
+  },
+
+  closeDelete: () => {
+    set({ modalOpen: true, deleteToggle: false });
+  },
+
   handleOpen: () => {
     set({ modalOpen: true });
   },
@@ -39,6 +48,13 @@ const userStore = create((set) => ({
   fetchUsers: async () => {
     const res = await axios.get("/users");
     set({ users: res.data.users });
+  },
+
+  fetchUser: async () => {
+    const res = await axios.get("/user/1");
+    set({
+      user: res.data.user,
+    });
   },
 
   handleImage: (e) => {
@@ -95,40 +111,73 @@ const userStore = create((set) => ({
 
   updateUser: async (e) => {
     e.preventDefault();
-    const {
-      updateForm: { _id, fullName, email, password, image, job, des },
-      updateImage,
-    } = userStore.getState();
-    const formdata = new FormData();
-    formdata.append("fullName", fullName);
-    formdata.append("email", email);
-    formdata.append("password", password);
-    formdata.append("image", updateImage);
-    formdata.append("job", job);
-    formdata.append("des", des);
-    const res = await axios.put(`/update-user/${_id}`, formdata);
-    set({
-      createForm: {
-        fullName: "",
-        email: "",
-        password: "",
-        image: "",
-        job: "",
-        des: "",
-      },
-      modalOpen: false,
-      updateForm: {
-        _id: null,
-        fullName: "",
-        email: "",
-        password: "",
-        image: "",
-        job: "",
-        des: "",
-      },
-      updateImage: "",
-    });
+    try {
+      const {
+        updateForm: { _id, fullName, email, password, image, des, job },
+        user,
+        updateImage,
+      } = userStore.getState();
+      const formdata = new FormData();
+      formdata.append("fullName", fullName);
+      formdata.append("email", email);
+      formdata.append("password", password);
+      formdata.append("image", updateImage);
+      formdata.append("job", job);
+      formdata.append("des", des);
+      const res = await axios.put(`/update-user/1`, formdata);
+      set({
+        user: res.data.user,
+        modalOpen: false,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   },
+
+  // updateUser: async (e) => {
+  //   e.preventDefault();
+  //   const {
+  //     updateForm: { _id, fullName, email, password, image, job, des },
+  //     updateImage,
+  //     user,
+  //   } = userStore.getState();
+  //   const formdata = new FormData();
+  //   formdata.append("fullName", fullName);
+  //   formdata.append("email", email);
+  //   formdata.append("password", password);
+  //   formdata.append("image", updateImage);
+  //   formdata.append("job", job);
+  //   formdata.append("des", des);
+  //   console.log(des);
+  //   console.log(job);
+  //   console.log(fullName);
+  //   console.log(email);
+  //   console.log(password);
+  //   console.log(updateImage);
+  //   console.log(user._id);
+  //   const res = await axios.put(`/update-user/1`, formdata);
+  //   set({
+  //     createForm: {
+  //       fullName: "",
+  //       email: "",
+  //       password: "",
+  //       image: "",
+  //       job: "",
+  //       des: "",
+  //     },
+  //     modalOpen: false,
+  //     updateForm: {
+  //       _id: null,
+  //       fullName: "",
+  //       email: "",
+  //       password: "",
+  //       image: "",
+  //       job: "",
+  //       des: "",
+  //     },
+  //     updateImage: "",
+  //   });
+  // },
 
   // updateUser: async (e) => {
   //   e.preventDefault();
@@ -172,6 +221,14 @@ const userStore = create((set) => ({
       return users._id !== _id;
     });
     set({ users: newUser });
+  },
+
+  deleteAccount: async (_id) => {
+    await axios.delete(`/user-account/${_id}`);
+    set({
+      modalOpen: false,
+    });
+    window.location.replace("/started");
   },
 }));
 

@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 import WarningIcon from "@mui/icons-material/Warning";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import userStore from "../stores/UserStore";
 
 export default function DeleteModel({ DeleteAdmin, Cancel }) {
+  const store = userStore();
+
+  useEffect(() => {
+    store.fetchUser();
+  }, []);
+
   return (
     <form className="flex flex-col gap-5 w-full text-slate-700 dark:text-slate-400 laptop:max-w-sm">
       <div className="flex items-center gap-5 ">
@@ -31,7 +38,7 @@ export default function DeleteModel({ DeleteAdmin, Cancel }) {
           size="large"
           endIcon={<CheckIcon />}
           className="btn btn-contained-danger "
-          onClick={() => DeleteAdmin(false)}
+          onClick={() => store.deleteAccount(store.user._id)}
         >
           Yes
         </Button>

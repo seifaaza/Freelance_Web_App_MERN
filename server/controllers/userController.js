@@ -8,11 +8,14 @@ const fetchUsers = async (req, res) => {
   res.json({ users: users });
 };
 
+var loggedUserId 
+
 async function signup(req, res) {
   try{
     const {fullName, email, password} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8)
     const users = await Users.create({fullName, email, password: hashedPassword});
+    loggedUserId = users._id
     const exp = Date.now() + 1000 * 60 * 60 * 24;
     const token = jwt.sign({sub: users._id, exp}, process.env.SECRET)
   
@@ -23,15 +26,13 @@ async function signup(req, res) {
     secure : process.env.NODE_ENV === 'production',
   })
   res.json({ users: users })
-
+  
   }
   catch(err){
     console.log(err);
     res.sendStatus(400)
   }
 }
-
-var loggedUserId 
 
 async function login(req, res) {
   try {
@@ -63,6 +64,22 @@ const fetchUser = async (req, res) => {
   res.json({ user: user });
 };
 
+const updateUser = async (req, res) => {
+  try {
+    // userId = req.params.id;
+    const userId = loggedUserId;
+    const {fullName, email,  job, des , password, availability} = req.body;
+    const image = !req.file ? "avatar"  : req.file.filename ;
+    // const hashedPassword = bcrypt.hashSync(password, 8)
+    await Users.findByIdAndUpdate(userId, { fullName, email, image, job, des, availability, password});
+    const user = await Users.findById(userId);
+    res.json({ user: user });
+  }catch(err) {
+    console.log("Updating user failed");
+    console.log(err);
+  }
+};
+
 function checkAuth(req, res) {
   try{
     res.sendStatus(500)
@@ -81,20 +98,7 @@ function logout(req, res) {
   }
 }
 
-const updateUser = async (req, res) => {
-  try {
-    userId = req.params.id;
-    const {fullName, email,  job, des , password, availability} = req.body;
-    const image = !req.file ? "avatar"  : req.file.filename ;
-    // const hashedPassword = bcrypt.hashSync(password, 8)
-    await Users.findByIdAndUpdate(userId, { fullName, email, image, job, des, availability, password});
-    const user = await Users.findById(userId);
-    res.json({ user: user });
-  }catch(err) {
-    console.log("Updating user failed");
-    console.log(err);
-  }
-};
+
 
 
 const deleteUser = async (req, res) => {
@@ -103,6 +107,14 @@ const deleteUser = async (req, res) => {
   await Users.findByIdAndDelete(userId);
 
   res.json({ success: "record deleted" });
+};
+
+const deleteAcc = async (req, res) => {
+  const userId = req.params.id;
+
+  await Users.findByIdAndDelete(userId);
+
+  res.json({ success: "account deleted" });
 };
 
 module.exports = {
@@ -114,4 +126,5 @@ module.exports = {
   checkAuth: checkAuth,
   login: login,
   logout: logout,
+  deleteAcc : deleteAcc
 };
