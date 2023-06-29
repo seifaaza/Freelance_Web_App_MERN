@@ -15,6 +15,7 @@ const adminStore = create((set) => ({
   },
 
   updateForm: {
+    _id: null,
     firstName: "",
     lastName: "",
     email: "",
@@ -31,6 +32,13 @@ const adminStore = create((set) => ({
   fetchAdmins: async () => {
     const res = await axios.get("/admins");
     set({ admins: res.data.admins });
+  },
+
+  fetchAdmin: async () => {
+    const res = await axios.get("/admin/1");
+    set({
+      admin: res.data.admin,
+    });
   },
 
   addAdmin: async (e) => {
@@ -97,9 +105,8 @@ const adminStore = create((set) => ({
     e.preventDefault();
     const {
       updateForm: { _id, firstName, lastName, email, password },
+      admin,
     } = adminStore.getState();
-    console.log(email);
-    console.log(password);
     const res = await axios.put(`/admin/${_id}`, {
       firstName,
       lastName,
@@ -107,6 +114,7 @@ const adminStore = create((set) => ({
       password,
     });
     set({
+      admin: res.data.admin,
       updateForm: {
         _id: null,
         firstName: "",

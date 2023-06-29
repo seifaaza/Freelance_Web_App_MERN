@@ -8,12 +8,6 @@ const fetchUsers = async (req, res) => {
   res.json({ users: users });
 };
 
-const fetchUser = async (req, res) => {
-  const userId = req.params.id;
-  const user = await Users.findById(userId);
-  res.json({ user: user });
-};
-
 async function signup(req, res) {
   try{
     const {fullName, email, password} = req.body;
@@ -37,11 +31,13 @@ async function signup(req, res) {
   }
 }
 
+var loggedUserId 
+
 async function login(req, res) {
   try {
     const {email, password} = req.body;
     const user = await Users.findOne({email});
-
+    loggedUserId = user._id
   if(!user) return res.sendStatus(401);
   const passwordMatch = bcrypt.compareSync(password, user.password);
   if(!passwordMatch) return res.sendStatus(401)
@@ -60,12 +56,16 @@ async function login(req, res) {
 catch(err){
   console.log(err);
   res.sendStatus(400)
-}
-}
+}}
+
+const fetchUser = async (req, res) => {
+  const user = await Users.findById(loggedUserId);
+  res.json({ user: user });
+};
 
 function checkAuth(req, res) {
   try{
-    res.sendStatus(200)
+    res.sendStatus(500)
   } catch(err){
     return res.sendStatus(400)
   }

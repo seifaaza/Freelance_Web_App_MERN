@@ -10,7 +10,7 @@ const adminAuthStore = create((set) => ({
     email: "",
     password: "",
   },
-  admin: null,
+  // admin: null,
 
   updateLoginForm: (e) => {
     const { name, value } = e.target;
@@ -61,7 +61,7 @@ const adminAuthStore = create((set) => ({
       });
       set({
         loggedIn: true,
-        admin: res.data.admin,
+        // admin: res.data.admin,
       });
     } catch (err) {
       set({ loggedIn: false });

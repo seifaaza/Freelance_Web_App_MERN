@@ -11,16 +11,6 @@ const fetchAdmins = async (req, res) => {
   }
 };
 
-const fetchAdmin = async (req, res) => {
-  try{
-    const adminID = req.params.id;
-    const admin = await Admins.findById(adminID);
-    res.json({ admin: admin });
-  }catch(err) {
-    console.log("fetching admin failed");
-  }
-};
-
 const createAdmin = async (req, res) => {
   try{
     const {firstName, lastName, email, password} = req.body;
@@ -34,18 +24,20 @@ const createAdmin = async (req, res) => {
   }
 };
 
+var loggedAdminId 
+
 async function login(req, res) {
   try {
     const {email, password} = req.body;
     const admin = await Admins.findOne({email});
-
+    loggedAdminId = admin._id
   if(!admin) return res.sendStatus(401);
   const passwordMatch = bcrypt.compareSync(password, admin.password);
   if(!passwordMatch) return res.sendStatus(401)
-  
+
   const exp = Date.now() + 1000 * 60 * 60 * 24;
   const token = jwt.sign({sub: admin._id, exp}, process.env.SECRET)
-  
+
   res.cookie("AdminAuthorization", token, {
     expires : new Date(exp),
     httpOnly : true,
@@ -59,6 +51,16 @@ catch(err){
   res.sendStatus(400)
 }
 }
+
+const fetchAdmin = async (req, res) => {
+  try{
+    const adminID = req.params.id;
+    const admin = await Admins.findById(loggedAdminId);
+    res.json({ admin: admin });
+  }catch(err) {
+    console.log("fetching admin failed");
+  }
+};
 
 function checkAuth(req, res) {
   try{
@@ -83,16 +85,13 @@ const updateAdmin = async (req, res) => {
     adminId = req.params.id;
     const {firstName, lastName, email, password} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8)
-    
     await Admins.findByIdAndUpdate(adminId, {
     firstName: firstName,
     lastName: lastName,
     email: email,
     password: hashedPassword,
   });
-  
   const admin = await Admins.findById(adminId);
-  
   res.json({ admin: admin });
 }catch(err){
   console.log("Updating admin failed");
@@ -101,7 +100,6 @@ const updateAdmin = async (req, res) => {
 
 const deleteAdmin = async (req, res) => {
   try{
-
     const adminId = req.params.id;
     await Admins.findByIdAndDelete(adminId);
     res.json({ success: "record deleted" });

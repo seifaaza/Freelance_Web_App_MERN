@@ -115,7 +115,11 @@ const authStore = create((set) => ({
   checkAuth: async () => {
     try {
       const res = await axios("/check-auth", { withCredentials: true });
-      set({ loggedIn: true, user: res.data.user, userId: res.data.user._id });
+      set({
+        loggedIn: true,
+        //  user: res.data.user,
+        //  userId: res.data.user._id
+      });
     } catch (err) {
       set({ loggedIn: false });
     }

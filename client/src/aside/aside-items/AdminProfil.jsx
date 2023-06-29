@@ -23,7 +23,6 @@ export default function AdminProfil() {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
 
-  const loggedStore = adminAuthStore();
   const store = adminStore();
 
   const handleThemeSwitch = () => {
@@ -37,7 +36,7 @@ export default function AdminProfil() {
   };
 
   useEffect(() => {
-    loggedStore.login();
+    store.fetchAdmin();
   }, []);
 
   const deleteModalAction = () => {
@@ -45,7 +44,7 @@ export default function AdminProfil() {
   };
 
   const DeleteAdmin = (SignEvent) => {
-    store.deleteAdmin(loggedStore.admin._id);
+    store.deleteAdmin(store.admin._id);
   };
 
   const Cancel = (SignEvent) => {
@@ -64,12 +63,10 @@ export default function AdminProfil() {
         <div className="flex flex-col gap-4 ">
           <div className="flex flex-col text-small dark:text-white">
             <h4 className=" text-small-heading">
-              {loggedStore.admin && loggedStore.admin.firstName} {}
-              {loggedStore.admin && loggedStore.admin.lastName}
+              {store.admin && store.admin.firstName} {}
+              {store.admin && store.admin.lastName}
             </h4>
-            <p className=" text-small">
-              {loggedStore.admin && loggedStore.admin.email}
-            </p>
+            <p className=" text-small">{store.admin && store.admin.email}</p>
           </div>
         </div>
       </div>
@@ -81,7 +78,7 @@ export default function AdminProfil() {
           endIcon={<EditIcon />}
           className="btn btn-outlined "
           onClick={() => {
-            store.toggleUpdate(loggedStore.admin);
+            store.toggleUpdate(store.admin);
             setDeleteModel(false);
           }}
         >
