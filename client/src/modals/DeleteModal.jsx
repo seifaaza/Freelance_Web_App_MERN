@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -7,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import userStore from "../stores/UserStore";
 
-export default function DeleteModel({ DeleteAdmin, Cancel }) {
+export default function DeleteModel() {
   const store = userStore();
 
   useEffect(() => {
@@ -27,9 +26,7 @@ export default function DeleteModel({ DeleteAdmin, Cancel }) {
           size="large"
           endIcon={<CloseIcon />}
           className="btn btn-outlined "
-          onClick={() => {
-            Cancel(false);
-          }}
+          onClick={store.handleClose}
         >
           Cancel
         </Button>

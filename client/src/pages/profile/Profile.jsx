@@ -53,7 +53,6 @@ export default function Profile() {
                 }
                 sx={{ width: 150, height: 150 }}
               />
-
               <div className="self-center flex flex-col gap-2 ">
                 <h1 className="text-3xl dark:text-white ">
                   {store.user && store.user.fullName}
@@ -122,36 +121,17 @@ export default function Profile() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2 max-w-md self-start font-main dark:text-slate-300">
-            <Chip
-              label="React js"
-              variant="outlined"
-              className="font-main dark:text-slate-300"
-            />
-            <Chip
-              label="React js"
-              variant="outlined"
-              className="font-main dark:text-slate-300"
-            />
-            <Chip
-              label="React js"
-              variant="outlined"
-              className="font-main dark:text-slate-300"
-            />
-            <Chip
-              label="React js"
-              variant="outlined"
-              className="font-main dark:text-slate-300"
-            />
-            <Chip
-              label="React js"
-              variant="outlined"
-              className="font-main dark:text-slate-300"
-            />
-            <Chip
-              label="React js"
-              variant="outlined"
-              className="font-main dark:text-slate-300"
-            />
+            {store.user &&
+              store.user.skills.map((item, index) => {
+                return (
+                  <Chip
+                    key={index}
+                    label={item}
+                    variant="outlined"
+                    className="font-main dark:text-slate-300"
+                  />
+                );
+              })}
           </div>
         </div>
       </div>

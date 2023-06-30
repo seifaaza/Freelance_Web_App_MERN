@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import ImageIcon from "@mui/icons-material/Image";
 import Avatar from "@mui/material/Avatar";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
@@ -10,9 +8,11 @@ import { TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import userStore from "../stores/UserStore";
+import { TagsInput } from "react-tag-input-component";
 
-export default function Complet({ DeleteAdmin, Cancel }) {
+export default function Edit() {
   const store = userStore();
+  const [selected, setSelected] = useState(["papaya"]);
 
   useEffect(() => {
     store.fetchUser();
@@ -63,6 +63,16 @@ export default function Complet({ DeleteAdmin, Cancel }) {
             }
           />
         </FormControl>
+      </div>
+      <div>
+        <pre>{JSON.stringify(selected)}</pre>
+        <TagsInput
+          value={selected}
+          onChange={setSelected}
+          name="fruits"
+          placeHolder="enter fruits"
+        />
+        <em>press enter to add new tag</em>
       </div>
       <TextField
         type="text"
@@ -120,7 +130,7 @@ export default function Complet({ DeleteAdmin, Cancel }) {
   );
 }
 
-Complet.propTypes = {
+Edit.propTypes = {
   DeleteAdmin: PropTypes.string,
   Cancel: PropTypes.string,
 };
