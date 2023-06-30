@@ -3,13 +3,14 @@ import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
 import { Button } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Link } from "react-router-dom";
 import DeleteModal from "../../modals/DeleteModal";
-import Complet from "../../modals/Complet";
+import EditModal from "../../modals/Edit";
 import userAuthStore from "../../stores/AuthStore";
 import userStore from "../../stores/UserStore";
 
@@ -53,7 +54,7 @@ export default function Profile() {
                 sx={{ width: 150, height: 150 }}
               />
 
-              <div className="self-center flex flex-col gap-2">
+              <div className="self-center flex flex-col gap-2 ">
                 <h1 className="text-3xl dark:text-white ">
                   {store.user && store.user.fullName}
                 </h1>
@@ -65,7 +66,7 @@ export default function Profile() {
             </div>
           </div>
           <div className="flex gap-2">
-            {store.user && store.user.availability ? (
+            {/* {store.user && store.user.availability ? (
               <Chip
                 label="Available now"
                 color="success"
@@ -79,7 +80,29 @@ export default function Profile() {
                 variant="contained"
                 className="font-main "
               />
-            )}
+            )} */}
+            {/* <Button
+              variant="contained"
+              size="medium"
+              endIcon={<EditIcon />}
+              className="btn btn-contained h-fit "
+              onClick={() => {
+                // setOpenComplet(true);
+                store.closeDelete(false);
+                store.toggleUpdate(store.user);
+              }}
+            >
+              Edit Profile
+            </Button> */}
+            <IconButton
+              className="h-fit"
+              onClick={() => {
+                store.closeDelete(false);
+                store.toggleUpdate(store.user);
+              }}
+            >
+              <EditIcon className="text-violet-600" />
+            </IconButton>
           </div>
         </div>
         <div className="flex justify-between w-full gap-6">
@@ -141,31 +164,18 @@ export default function Profile() {
           button to delete your account there is no option to restore the
           account !
         </p>
-        <div className="flex flex-col gap-2 items-center">
-          <Button
-            variant="contained"
-            size="medium"
-            endIcon={<EditIcon />}
-            className="btn btn-contained "
-            onClick={() => {
-              // setOpenComplet(true);
-              store.closeDelete(false);
-              store.toggleUpdate(store.user);
-            }}
-          >
-            Edit Profile
-          </Button>
-          <Button
-            variant="contained"
-            size="medium"
-            endIcon={<DeleteIcon />}
-            className="btn btn-contained-danger "
-            onClick={store.openDelete}
-          >
-            Delete my account
-          </Button>
-        </div>
+
+        <Button
+          variant="contained"
+          size="medium"
+          endIcon={<DeleteIcon />}
+          className="btn btn-contained-danger "
+          onClick={store.openDelete}
+        >
+          Delete my account
+        </Button>
       </div>
+
       <Modal
         open={store.modalOpen}
         onClose={store.handleClose}
@@ -179,7 +189,7 @@ export default function Profile() {
           {store.deleteToggle ? (
             <DeleteModal ModalOpen={ModalOpen} />
           ) : (
-            <Complet ModalOpen={ModalOpen} />
+            <EditModal ModalOpen={ModalOpen} />
           )}
         </Box>
       </Modal>

@@ -3,6 +3,7 @@ import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import ImageIcon from "@mui/icons-material/Image";
+import Avatar from "@mui/material/Avatar";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
@@ -24,39 +25,55 @@ export default function Complet({ DeleteAdmin, Cancel }) {
       className="flex flex-col gap-5 w-full text-slate-700 dark:text-slate-400 laptop:max-w-sm"
     >
       <div className="text-small-heading text-center mb-6">
-        <p className="text-violet-600 text-medium">
-          Hello {store.user && store.user.fullName}{" "}
+        <p className=" text-medium">
+          {/* Hello {store.user && store.user.fullName}{" "} */}
+          Edit your profile
         </p>
-        please complet your profile informations
+        {/* please complet your profile informations */}
       </div>
-      <FormControl variant="outlined" className="input-image">
-        <OutlinedInput
-          className="input-image text-ellipsis"
-          color="secondary"
-          startAdornment={
-            <div className="w-full">
-              <input
-                className="input-file"
-                id="my-file"
-                type="file"
-                name="image"
-                onChange={store.handleUpdateImage}
-              />{" "}
-              <div className="flex gap-4 text-violet-600">
-                <ImageIcon />
-                <label
-                  tabIndex="0"
-                  htmlFor="my-file"
-                  className="whitespace-nowrap"
-                >
-                  Add profile picture
-                </label>
-                <p className="file-return"></p>
-              </div>
-            </div>
-          }
+      <div className="flex gap-5 ">
+        <Avatar
+          src={`http://localhost:3000/uploads/${store.updateForm.image}`}
+          sx={{ width: 60, height: 60 }}
+          className="-z-10"
         />
-      </FormControl>
+        <FormControl variant="outlined" className="input-image ">
+          <OutlinedInput
+            className="input-image text-ellipsis"
+            color="secondary"
+            startAdornment={
+              <div className="w-fit">
+                <input
+                  className="input-file bg-dark"
+                  id="my-file"
+                  type="file"
+                  name="image"
+                  onChange={store.handleUpdateImage}
+                />{" "}
+                <div className="flex items-center gap-4 text-violet-600">
+                  <label
+                    tabIndex="0"
+                    htmlFor="my-file"
+                    className="whitespace-nowrap "
+                  >
+                    Change profile picture
+                  </label>
+                </div>
+              </div>
+            }
+          />
+        </FormControl>
+      </div>
+      <TextField
+        type="text"
+        name="fullName"
+        color="secondary"
+        id="outlined-textarea"
+        label="Username"
+        placeholder="Your username"
+        value={store.updateForm.fullName}
+        onChange={store.handleUpdateFieldChange}
+      />{" "}
       <TextField
         type="text"
         name="job"
@@ -87,7 +104,7 @@ export default function Complet({ DeleteAdmin, Cancel }) {
           className="btn btn-outlined-danger grow"
           onClick={store.handleClose}
         >
-          Skip
+          Cancel
         </Button>
         <Button
           type="submit"

@@ -426,14 +426,15 @@ img::selection {
 .input-file {
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
+  width: fit-content;
   height: 100%;
-  opacity: 0;
-  cursor: pointer;
+  opacity: 0%;
+  cursor: pointer !important;
 }
 
 .input-image fieldset{
-  border: dashed 3px rgba(124, 58, 237, 0.5);
+  /* border: dashed 3px rgba(124, 58, 237, 0.5); */
+  border: none;
   border-radius: 5px;
 }
 .css-1hg4bil-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
