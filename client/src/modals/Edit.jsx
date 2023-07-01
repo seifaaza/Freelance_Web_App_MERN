@@ -15,7 +15,8 @@ export default function Edit() {
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
-    store.fetchUser();
+    // store.fetchUser();
+    () => store.handleSkills(skills);
   }, []);
 
   return (
@@ -64,20 +65,12 @@ export default function Edit() {
           />
         </FormControl>
       </div>
-      <p onClick={() => store.handleSkills(skills)}>
-        {" "}
-        skills from store :{" "}
-        {store.skills &&
-          store.skills.map((item, index) => {
-            return <p key={index}>{item}</p>;
-          })}
-      </p>
       <TagsInput
         value={store.user && store.user.skills}
         onChange={setSkills}
         name="skills"
         placeHolder="Add your skills"
-        // onClick={() => {store.skills(skills)}}
+        onKeyUp={() => store.handleSkills(skills)}
       />
       <TextField
         type="text"
