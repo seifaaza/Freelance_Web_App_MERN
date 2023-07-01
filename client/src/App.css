@@ -436,19 +436,29 @@ img::selection {
   /* border: dashed 3px rgba(124, 58, 237, 0.5); */
   border: none;
   border-radius: 5px;
+  width: fit-content !important;
 }
 .css-1hg4bil-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
   border-color: rgba(124, 58, 237, 0.8) !important;
 }
 
-html {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
-    sans-serif, Apple Color Emoji, Segoe UI Emoji;
+.rti--container{
+  outline: none  !important;
+  --rti-main: var(--bg-violet-700) !important;
+  --rti-border: rgba(0, 0, 0, 0.3) !important;
+  --rti-radius: 4px !important;
+  --rti-s: .9rem !important;
+  font-family: var(--font-main) !important;
+  @apply dark:bg-slate-900 outline-none border-2 
 }
 
-.rti--container {
-  max-width: 300px;
+.rti--tag{
+  @apply dark:bg-slate-800 !important;
 }
+.rti--input{
+  @apply bg-transparent !important;
+}
+
 
 
 

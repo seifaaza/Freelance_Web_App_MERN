@@ -12,7 +12,7 @@ import { TagsInput } from "react-tag-input-component";
 
 export default function Edit() {
   const store = userStore();
-  const [selected, setSelected] = useState(["papaya"]);
+  const [skills, setSkills] = useState([]);
 
   useEffect(() => {
     store.fetchUser();
@@ -24,8 +24,8 @@ export default function Edit() {
       encType="multipart/form-data"
       className="flex flex-col gap-5 w-full text-slate-700 dark:text-slate-400 laptop:max-w-sm"
     >
-      <div className="text-small-heading text-center mb-6">
-        <p className=" text-medium">
+      <div className="text-small-heading text-center mb-6 font-main">
+        <p className=" text-medium ">
           {/* Hello {store.user && store.user.fullName}{" "} */}
           Edit your profile
         </p>
@@ -37,7 +37,7 @@ export default function Edit() {
           sx={{ width: 60, height: 60 }}
           className="-z-10"
         />
-        <FormControl variant="outlined" className="input-image ">
+        <FormControl variant="outlined" className="input-image">
           <OutlinedInput
             className="input-image text-ellipsis"
             color="secondary"
@@ -64,16 +64,21 @@ export default function Edit() {
           />
         </FormControl>
       </div>
-      <div>
-        <pre>{JSON.stringify(selected)}</pre>
-        <TagsInput
-          value={selected}
-          onChange={setSelected}
-          name="fruits"
-          placeHolder="enter fruits"
-        />
-        <em>press enter to add new tag</em>
-      </div>
+      <p onClick={() => store.handleSkills(skills)}>
+        {" "}
+        skills from store :{" "}
+        {store.skills &&
+          store.skills.map((item, index) => {
+            return <p key={index}>{item}</p>;
+          })}
+      </p>
+      <TagsInput
+        value={store.user && store.user.skills}
+        onChange={setSkills}
+        name="skills"
+        placeHolder="Add your skills"
+        // onClick={() => {store.skills(skills)}}
+      />
       <TextField
         type="text"
         name="fullName"

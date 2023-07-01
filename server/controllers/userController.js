@@ -66,12 +66,18 @@ const fetchUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    // userId = req.params.id;
     const userId = loggedUserId;
     const {fullName, email,  job, des , password, availability} = req.body;
+    
+    const skills = []
+    if (!Array.isArray(req.body.skills)) {req.body.skills = []}
+    for(let i = 0 ; i < req.body.skills.length ; i++){
+      skills.push(req.body.skills[i])
+    }
+
     const image = !req.file ? "avatar"  : req.file.filename ;
     // const hashedPassword = bcrypt.hashSync(password, 8)
-    await Users.findByIdAndUpdate(userId, { fullName, email, image, job, des, availability, password});
+    await Users.findByIdAndUpdate(userId, { fullName, email, image, job, des, availability, skills, password});
     const user = await Users.findById(userId);
     res.json({ user: user });
   }catch(err) {
@@ -128,3 +134,5 @@ module.exports = {
   logout: logout,
   deleteAcc : deleteAcc
 };
+
+
