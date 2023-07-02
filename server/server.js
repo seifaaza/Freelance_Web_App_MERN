@@ -15,6 +15,7 @@ const requireAdminAuth = require('./middleware/requireAdminAuth')
 const adminController = require("./controllers/adminController");
 const userController = require("./controllers/userController");
 const teamController = require("./controllers/teamController");
+const serviceController = require("./controllers/serviceController");
 
 // Load env variables
 const PORT = process.env.PORT || 5000;
@@ -51,8 +52,8 @@ app.post("/admin",  adminController.createAdmin);
 app.put("/admin/:id",  adminController.updateAdmin);
 app.delete("/admin/:id",  adminController.deleteAdmin);
 
-app.use('/user', express.static('uploads'))
 // Users
+app.use('/user', express.static('uploads'))
 app.get("/users", userController.fetchUsers);
 app.get("/user/:id", userController.fetchUser);
 app.post("/signup", userController.signup);
@@ -63,12 +64,20 @@ app.get("/logout", userController.logout);
 app.delete("/user/:id", userController.deleteUser);
 app.delete("/user-account/:id", userController.deleteAcc);
 
-app.use('/team', express.static('uploads'))
 // Team
+app.use('/team', express.static('uploads'))
 app.get("/team", teamController.fetchTeam);
 app.post("/team", uploadMiddleware.single("image"), teamController.createTeam);
 app.put("/team/:id", uploadMiddleware.single("image"),  teamController.updateTeam);
 app.delete("/team/:id", teamController.deleteTeam);
+app.use('/team', express.static('uploads'))
+
+// Service
+app.use('/service', express.static('uploads'))
+app.get("/services", serviceController.fetchServices);
+app.get("/service/:id", serviceController.fetchService);
+app.post("/service", uploadMiddleware.single("image"), serviceController.createService);
+app.delete("/service/:id", serviceController.deleteService);
 
 
 

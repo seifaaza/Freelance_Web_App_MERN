@@ -61,6 +61,7 @@ export default function Profile() {
                   {store.user && store.user.job}
                 </p>
                 <Rating name="read-only" value={3} readOnly />
+                {/* <a href="tel:+212668834097" target="_blank" rel="noreferrer"> call </a> */}
               </div>
             </div>
           </div>

@@ -15,8 +15,7 @@ export default function Edit() {
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
-    // store.fetchUser();
-    () => store.handleSkills(skills);
+    store.fetchUser();
   }, []);
 
   return (
