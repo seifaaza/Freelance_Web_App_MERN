@@ -9,17 +9,12 @@ import ServiceModal from "../../modals/ServiceModal";
 import serviceStore from "../../stores/ServiceStore";
 
 export default function Freelance() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
-    p: 4,
   };
 
   const store = serviceStore();
@@ -68,7 +63,7 @@ export default function Freelance() {
         >
           <Box
             sx={style}
-            className="shadow-md rounded-lg flex flex-col w-5/6 tablet:w-2/4 h-fit justify-between gap-4 dark:bg-slate-900"
+            className="shadow-md rounded-xl overflow-hidden flex flex-col w-5/6 tablet:w-2/4 h-fit justify-between gap-4 dark:bg-slate-900"
           >
             <ServiceModal />
           </Box>

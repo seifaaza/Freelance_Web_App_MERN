@@ -15,11 +15,11 @@ export default function Freelance() {
   //   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
       <div
-        className={`h-64 w-full  rounded overflow-hidden bg-cover bg-center bg-[url('http://localhost:3000/uploads/${store.showForm.image}')]`}
+        className={`h-64 w-full rounded rounded-b-none overflow-hidden bg-cover bg-center bg-[url('http://localhost:3000/uploads/${store.showForm.image}')]`}
       ></div>
-      <div className="flex flex-col justify-between w-full laptop:w-full gap-3 font-main dark:text-slate-300">
+      <div className="flex flex-col justify-between w-full laptop:w-full gap-3 font-main dark:text-slate-300 p-8">
         <div className="flex justify-between w-full">
           <div className="flex justify-center items-center gap-3 ">
             <Avatar alt="freelancer" src="/assets/images/mohamed.jpg" />

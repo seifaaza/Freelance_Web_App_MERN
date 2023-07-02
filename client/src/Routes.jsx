@@ -5,7 +5,7 @@ import Community from "./pages/community/Community";
 import About from "./pages/about/hello-world/About";
 import Team from "./pages/about/team/Team";
 import Error from "./error/Error";
-import Freelance from "./pages/freelance/Freelance";
+import Freelance from "./pages/explore/Freelance";
 import Marketplace from "./pages/marketplace/MarketPlace";
 import CreativeNetwork from "./pages/creative-network/CreativeNetwork";
 import Dashboard from "./pages/dashboard/Dashboard";

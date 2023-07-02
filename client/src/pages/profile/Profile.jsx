@@ -4,6 +4,7 @@ import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
 import { Button } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
@@ -13,24 +14,17 @@ import DeleteModal from "../../modals/DeleteModal";
 import EditModal from "../../modals/Edit";
 import userAuthStore from "../../stores/AuthStore";
 import userStore from "../../stores/UserStore";
+import Add from "../../modals/Add";
 
 export default function Profile() {
-  const [deleteToggle, setDeleteToggle] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [completModalOpen, setCompletModalOpen] = useState(true);
+  const [addToggle, setAddToggle] = useState(false);
   const loggedStore = userAuthStore();
   const store = userStore();
 
   useEffect(() => {
     store.fetchUser();
   }, []);
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-  const completModalClose = () => {
-    setCompletModalOpen(false);
-  };
 
   const ModalOpen = (SignEvent) => {
     setModalOpen(SignEvent);
@@ -66,38 +60,11 @@ export default function Profile() {
             </div>
           </div>
           <div className="flex gap-2">
-            {/* {store.user && store.user.availability ? (
-              <Chip
-                label="Available now"
-                color="success"
-                variant="contained"
-                className="font-main "
-              />
-            ) : (
-              <Chip
-                label="Unavailable now"
-                color="error"
-                variant="contained"
-                className="font-main "
-              />
-            )} */}
-            {/* <Button
-              variant="contained"
-              size="medium"
-              endIcon={<EditIcon />}
-              className="btn btn-contained h-fit "
-              onClick={() => {
-                // setOpenComplet(true);
-                store.closeDelete(false);
-                store.toggleUpdate(store.user);
-              }}
-            >
-              Edit Profile
-            </Button> */}
             <IconButton
               className="h-fit"
               onClick={() => {
-                store.closeDelete(false);
+                // store.closeDelete(false);
+                store.openEdit(true);
                 store.toggleUpdate(store.user);
               }}
             >
@@ -137,7 +104,17 @@ export default function Profile() {
         </div>
       </div>
       <div className="flex flex-wrap bg-white bg-opacity-80 backdrop-blur-lg dark:text-white dark:bg-opacity-5 p-4 tablet:p-6 laptop:p-8 rounded-lg font-main gap-6  ">
-        <p>hhhh</p>
+        <div className="flex justify-end w-full">
+          <Button
+            variant="contained"
+            size="large"
+            endIcon={<AddIcon />}
+            className="btn btn-contained "
+            onClick={store.openAdd}
+          >
+            Add
+          </Button>
+        </div>
       </div>
       <div className="flex justify-between bg-white bg-opacity-80 backdrop-blur-lg dark:text-white dark:bg-opacity-5 p-4 tablet:p-6 laptop:p-8 rounded-lg font-main gap-6  ">
         <p className="max-w-md">
@@ -150,7 +127,7 @@ export default function Profile() {
           variant="contained"
           size="medium"
           endIcon={<DeleteIcon />}
-          className="btn btn-contained-danger "
+          className="btn btn-contained-danger"
           onClick={store.openDelete}
         >
           Delete my account
@@ -169,9 +146,11 @@ export default function Profile() {
         >
           {store.deleteToggle ? (
             <DeleteModal ModalOpen={ModalOpen} />
-          ) : (
+          ) : store.addToggle ? (
+            <Add />
+          ) : store.editToggle ? (
             <EditModal ModalOpen={ModalOpen} />
-          )}
+          ) : null}
         </Box>
       </Modal>
     </div>

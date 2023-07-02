@@ -1,10 +1,10 @@
-const Users = require("../models/user");
+const User = require("../models/user");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require("path");
 
 const fetchUsers = async (req, res) => {
-  const users = await Users.find();
+  const users = await User.find();
   res.json({ users: users });
 };
 
@@ -14,7 +14,7 @@ async function signup(req, res) {
   try{
     const {fullName, email, password} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8)
-    const users = await Users.create({fullName, email, password: hashedPassword});
+    const users = await User.create({fullName, email, password: hashedPassword});
     loggedUserId = users._id
     const exp = Date.now() + 1000 * 60 * 60 * 24;
     const token = jwt.sign({sub: users._id, exp}, process.env.SECRET)
@@ -37,7 +37,7 @@ async function signup(req, res) {
 async function login(req, res) {
   try {
     const {email, password} = req.body;
-    const user = await Users.findOne({email});
+    const user = await User.findOne({email});
     loggedUserId = user._id
   if(!user) return res.sendStatus(401);
   const passwordMatch = bcrypt.compareSync(password, user.password);
@@ -60,7 +60,7 @@ catch(err){
 }}
 
 const fetchUser = async (req, res) => {
-  const user = await Users.findById(loggedUserId);
+  const user = await User.findById(loggedUserId);
   res.json({ user: user });
 };
 
@@ -77,8 +77,8 @@ const updateUser = async (req, res) => {
 
     const image = !req.file ? "avatar"  : req.file.filename ;
     // const hashedPassword = bcrypt.hashSync(password, 8)
-    await Users.findByIdAndUpdate(userId, { fullName, email, image, job, des, availability, skills, password});
-    const user = await Users.findById(userId);
+    await User.findByIdAndUpdate(userId, { fullName, email, image, job, des, availability, skills, password});
+    const user = await User.findById(userId);
     res.json({ user: user });
   }catch(err) {
     console.log("Updating user failed");
@@ -104,13 +104,10 @@ function logout(req, res) {
   }
 }
 
-
-
-
 const deleteUser = async (req, res) => {
   const userId = req.params.id;
 
-  await Users.findByIdAndDelete(userId);
+  await User.findByIdAndDelete(userId);
 
   res.json({ success: "record deleted" });
 };
@@ -118,7 +115,7 @@ const deleteUser = async (req, res) => {
 const deleteAcc = async (req, res) => {
   const userId = req.params.id;
 
-  await Users.findByIdAndDelete(userId);
+  await User.findByIdAndDelete(userId);
 
   res.json({ success: "account deleted" });
 };

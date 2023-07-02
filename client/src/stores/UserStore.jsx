@@ -3,7 +3,9 @@ import axios from "axios";
 
 const userStore = create((set) => ({
   modalOpen: false,
+  editToggle: false,
   deleteToggle: false,
+  addToggle: false,
 
   users: null,
   user: null,
@@ -38,12 +40,32 @@ const userStore = create((set) => ({
     set({ skills: res });
     console.log(skills);
   },
+
   openDelete: () => {
-    set({ modalOpen: true, deleteToggle: true });
+    set({
+      modalOpen: true,
+      deleteToggle: true,
+      editToggle: false,
+      addToggle: false,
+    });
   },
 
-  closeDelete: () => {
-    set({ modalOpen: true, deleteToggle: false });
+  openAdd: () => {
+    set({
+      modalOpen: true,
+      addToggle: true,
+      editToggle: false,
+      deleteToggle: false,
+    });
+  },
+
+  openEdit: () => {
+    set({
+      modalOpen: true,
+      editToggle: true,
+      deleteToggle: false,
+      addToggle: false,
+    });
   },
 
   handleOpen: () => {

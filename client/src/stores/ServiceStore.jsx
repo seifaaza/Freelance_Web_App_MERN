@@ -3,6 +3,7 @@ import axios from "axios";
 
 const serviceStore = create((set) => ({
   modalOpen: false,
+  addToggle: false,
 
   services: null,
   service: null,

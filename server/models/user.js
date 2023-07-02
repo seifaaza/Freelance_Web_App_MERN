@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const usersSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   fullName: String,
   email: {
     type: String,
@@ -20,8 +20,13 @@ const usersSchema = new mongoose.Schema({
   skills : {
     type: Array
   },
-
+  services : [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Service"
+    }
+    ]
 });
 
-const Users = mongoose.model("Users", usersSchema);
-module.exports = Users;
+const User = mongoose.model("User", userSchema);
+module.exports = User;

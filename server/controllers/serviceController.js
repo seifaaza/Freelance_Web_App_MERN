@@ -1,16 +1,16 @@
-const Services = require("../models/service");
+const Service = require("../models/service");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require("path");
 
 const fetchServices = async (req, res) => {
-  const services = await Services.find();
+  const services = await Service.find();
   res.json({ services: services });
 };
 
 const fetchService = async (req, res) => {
     serviceId =  req.params.id;
-  const service = await Services.findById(serviceId);
+  const service = await Service.findById(serviceId);
   res.json({ service: service });
 };
 
@@ -18,7 +18,7 @@ const createService = async (req, res) => {
     try {
     const image = !req.file ? "avatar"  : req.file.filename ;
     const {title, des, price} = req.body;
-    const service = await Services.create({title, des, price, image})
+    const service = await Service.create({title, des, price, image})
     res.json({ service: service })
     }catch(err){
       console.log(err)
@@ -28,7 +28,7 @@ const createService = async (req, res) => {
 
 const deleteService = async (req, res) => {
   const serviceId = req.params.id;
-  await Services.findByIdAndDelete(serviceId);
+  await Service.findByIdAndDelete(serviceId);
   res.json({ success: "record deleted" });
 };
 
